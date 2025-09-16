@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta content="initial-scale=1, shrink-to-fit=no, width=device-width" name="viewport">
+    <title>Infografía Balance social</title>
+
+    <!-- CSS -->
+    <link href="../../static/css/styles_EUS.css" rel="stylesheet" />
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.1/html2canvas.min.js"></script>
+
+
+  </head>
+
+  <body {% block bodyattrs %}{% endblock%}>
+
+<header>
+    <div class="corazon">
+        <div class="titulo">
+            {{Nombre}}<br>
+            <em>{{TXT003}}</em> <!-- Enseña el corazón -->
+        </div>
+        <div class="logo-entidad" style="background-image: url({{Logo}})"></div>
+    </div>
+
+    <div class="mes titulo"> <!-- Balance/Auditoría social de la Economía Social y Solidaria [AÑO] -->
+        {% if auditoria_balance.lower() == "bal" %}
+            {% if TXT001 is string %}
+                {{ ' '.join(TXT001.split(' ')[0:2]) }} <em>{{ ' '.join(TXT001.split(' ')[2:]) }}</em> {{ YEAR }}
+            {% endif %}
+        {% else %}
+            {% if TXT002 is string %}
+                {{ ' '.join(TXT002.split(' ')[0:2]) }} <em>{{ ' '.join(TXT002.split(' ')[2:]) }}</em> {{ YEAR }}
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <div class="personas-porcent">
+        <p><strong class="cifra cifra3">{% if ind1d != "nan" %}%{{ind1d}}{% else %}*{% endif%}</strong> {{TXT005}} </p> <!-- Mujeres -->
+        <p><strong class="cifra cifra3">{% if ind1h != "nan" %}%{{ind1h}}{% else %}*{% endif%}</strong> {{TXT006}} </p> <!-- Hombres -->
+        <p><strong class="cifra cifra3">{% if ind1a != "nan" %}%{{ind1a}}{% else %}*{% endif%}</strong> {{TXT007}} </p> <!-- Identidades no binarias -->
+    </div>
+
+    <div class="personas-numero">
+        <div>
+            <p class="label label1">{{TXT008}}</p> <!-- Trabajadoras -->
+            {% if ind118 is defined and ind118|int != 0 %}
+                <strong class="cifra cifra3">{{ind118}}</strong>
+            {% else %}
+                <span class="description">* {{G1}}</span> <!-- La entidad no cuenta con personas trabajadoras -->
+            {% endif %}
+        </div>
+        <div>
+            <p class="label label1">{{TXT010}}</p> <!-- Voluntarias -->
+            {% if q0107 is defined and q0107|int != 0 %}
+                <strong class="cifra cifra3">{{q0107}}</strong>
+            {% else %}
+                <span class="description">* {{G2}}</span> <!-- Por su estructura la entidad no cuenta con personas voluntarias -->
+            {% endif %}
+        </div>
+        <div>
+            <p class="label label1">{{TXT012}}</p> <!-- Asociadas -->
+            {% if q0101agrupada is defined and q0101agrupada|int != 0 %}
+                <strong class="cifra cifra3">{{q0101agrupada}}</strong>
+            {% else %}
+                <span class="description">* {{G3}}</span> <!-- Por su estructura la entidad no cuenta con personas asociadas -->
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="personas text-center">
+        <span class="cifra cifra2">{{ind2}}</span>
+        <span class="label label3">{{TXT004}}</span> <!-- Personas de la organización-->
+
+    </div>
+
+    <div class="columnas">
+        <div class="ingresos">
+            <span class="label label2">{{TXT014}}</span> <!-- Ingresos -->
+            <span class="cifra cifra4">{{q1203 | subrender}}€</span>
+        </div>
+
+        <div class="gastos">
+            <span class="label label2">{{TXT015}}</span> <!-- Gastos -->
+            <span class="cifra cifra4">{{q1201 | subrender}}€</span>
+        </div>
+
+    </div>
+
+</header>
+
+<div class="columna1">
+    <section id="equidad">
+        <img class="icono" src="../../static/img/equidad.png">
+        <h2 class="titulo">{{TXT016}}</h2> <!-- Equidad -->
+
+        <div class="columnas">
+            <div class="text-center">
+                <span class="cifra cifra1">{% if ind20d != "nan" and ind20d | is_float %}%{{ind20d}}{% else %}*{% endif%}</span>
+                <span class="label label1">{{TXT017}}</span><br> <!-- Mujeres en puestos de responsabilidad -->
+                <span class="description">
+                    {% set values = { "E1": E1, "E3": E3, "E4": E4, "E7": E7, "E8": E8, "T2": T2 } %}
+
+                    {% if ind20d in values %}
+                        * {{ values[ind20d] }}
+                    {% endif %}
+                </span> <!-- Esta entidad cuenta con representación horizontal -->
+            </div>
+
+            <div class="text-center">
+                <span class="cifra cifra1">{% if ind97 != "nan" and ind97 | is_float %}%{{(ind97|float|abs|replace(".", ",")).rstrip(',0')}}{% else %}*{% endif%}</span>
+                <span class="label label1">{{TXT020}}</span><br> <!-- Brecha salarial entre hombres y mujeres -->
+                <span class="description">
+                    {% if ind97 is defined and ind97 | is_float  %}
+                        {% if ind97|float >= 0  %}
+                            * {{TXT025 | replace("ind97", (ind97|float|abs|replace(".", ",")).rstrip(',0')) }} <!-- Los hombres ganan un X % más que las mujeres -->
+                        {% else %}
+                            * {{TXT026 | replace("ind97", (ind97|float|abs|replace(".", ",")).rstrip(',0')) }} <!-- Las mujeres ganan un X % mas que los hombres” -->
+                        {% endif %}
+                    {% else %}
+                        {% set values = { "E2": E2, "E3": E3, "E4": E4, "E5": E5 } %}
+
+                        {% if ind97 in values %}
+                            * {{ values[ind97] }}
+                        {% endif %}
+                    {% endif %}
+                </span>
+            </div>
+
+            <div class="text-center">
+                <span class="cifra cifra1">{% if ind27 != "nan" and ind27 | is_float %}{{ind27}}{% else %}*{% endif%}</span>
+                <span class="label label1">{{TXT018}}</span><br> <!-- Proporción salarial entre la plantilla -->
+                <span class="description">
+                    {% set values = { "E5": E5, "E6": E6, "E7": E7 } %}
+
+                    {% if ind27 in values %}
+                        * {{ values[ind27] }}
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+
+        <ul class="checklist">
+            <li> {{TXT027}} <!-- Difusión de salarios a la plantilla -->
+                <span class="check">
+                    {% if ind58 == "True" %}
+                        ✔
+                    {% elif ind58 == "False" %}
+                        ✗
+                    {% endif %}
+                </span>
+                <span class="description">
+                    {% set values = { "E8": E8, "E9": E9 } %}
+
+                    {% if ind58 in values %}
+                        * {{ values[ind58] }}
+                    {% endif %}
+                </span>
+            </li>
+        </ul>
+    </section>       
+
+    <section id="sostenibilidad">
+        <img class="icono" src="../../static/img/sostenibilidad_ecologica.png">
+        <h2 class="titulo">{{TXT038}}</h2> <!-- Sostenibilidad ecológica -->
+        <ul class="checklist">
+            <li>{{TXT039}} <!-- Sistema de gestión ambiental -->
+                <span class="check">{% if q4104a == "True" %}✔{% else %}✗{% endif %}</span>
+            </li>
+            <li>{{TXT040}} <!-- Sensibilización ambiental a nivel interno -->
+                <span class="check">{% if q4104b == "True" %}✔{% else %}✗{% endif %}</span>
+            </li>
+            <li>{{TXT041}} <!-- Divulgación ambiental a nivel externo -->
+                <span class="check">{% if q4104c == "True" %}✔{% else %}✗{% endif %}</span>
+            </li>
+            <li>{{TXT042}} <!-- Medidas de reducción de impacto ambiental<br>y divulgación a nivel externo -->
+                <span class="check">{% if q4104d == "True" %}✔{% else %}✗{% endif %}</span>
+            </li>
+            <li>{{TXT043}} <!-- Energía 100% renovable -->
+                <span class="check">
+                    {% if ind62 == "True" %}
+                        ✔
+                    {% elif ind62 == "False" %}
+                        ✗
+                    {% endif %}
+                </span>
+                <span class="description">
+                    {% set values = { "S1": S1 } %}
+
+                    {% if ind62 in values %}
+                        * {{ values[ind62] }}
+                    {% endif %}
+                </span>
+            </li>
+        </ul>
+    </section>
+
+    <section id="trabajo">
+        <img class="icono" src="../../static/img/trabajo_digno.png">
+        <h2 class="titulo">{{TXT045}}</h2> <!-- Trabajo digno -->
+
+        <ul class="checklist">
+            <li>{{TXT046}} <!-- Espacios de atención emocional y cuidado -->
+                <span class="check">{% if ind105 == "True" %}✔{% elif ind105 == "False" %}✗{% endif %}</span>
+                <span class="description">
+                    {% set values = { "T1": T1, "T2": T2, "T3": T3, "T4": T4 } %}
+
+                    {% if ind105 in values and ind78 not in values %}
+                        * {{ values[ind105] }}
+                    {% endif %}
+                </span>
+            </li>
+            <li>{{TXT047}} <!-- Reglamento interno de relaciones laborales -->
+                <span class="check">{% if ind78 == "True" %}✔{% elif ind78 == "False" %}✗{% endif %}</span>
+                <span class="description">
+                    {% set values = { "T1": T1, "T2": T2, "T3": T3, "T4": T4 } %}
+
+                    {% if ind78 in values %}
+                        * {{ values[ind78] }}
+                    {% endif %}
+                </span>
+            </li>
+            <li>{{TXT048}} <!-- Medidas que mejoran la ley de conciliación -->
+                <span class="check">{% if ind80 == "True" %}✔{% elif ind80 == "False" %}✗{% endif %}</span>
+                <span class="description">
+                    {% set values = { "T1": T1, "T2": T2, "T3": T3, "T4": T4 } %}
+
+                    {% if ind80 in values %}
+                        * {{ values[ind80] }}
+                    {% endif %}
+                </span>
+            </li>
+        </ul>
+
+    </section>
+</div>
+
+<div class="columna2">
+    <section id="cooperacion">
+        <h2 class="titulo">{{TXT030A}}</h2> <!-- Cooperación y -->
+        <h2 class="titulo secundario"> {{TXT030B}}</h2> <!-- compromiso con el entorno -->
+
+        <img class="icono" src="../../static/img/cooperacion.png">
+        <img class="icono secundario" src="../../static/img/compromiso_entorno.png">
+
+        <aside>
+            <span class="cifra cifra1">%{{ind254}}</span>
+            <span class="label label1">{{TXT031}}</span> <!-- Compras dentro de la Economía Social -->
+        </aside>
+
+
+        <ul class="checklist">
+            <li>{{TXT032}}</li> <!--  Intercooperación con mismo sector compartiendo: -->
+            <li>{{TXT033}} <!-- Local -->
+                <span class="check">{% if q5305a == "True" %}✔{% else %}✗{% endif %}</span>
+            </li>
+            <li>{{TXT034}} <!-- Conocimiento -->
+                <span class="check">{% if q5305b == "True" %}✔{% else %}✗{% endif %}</span>
+            </li>
+            <li>{{TXT035}} <!-- Gestión -->
+                <span class="check">{% if q5305c == "True" %}✔{% else %}✗{% endif %}</span>
+            </li>
+            <li>{{TXT036}} <!-- Proyectos -->
+                <span class="check">{% if q5305d == "True" %}✔{% else %}✗{% endif %}</span>
+            </li>
+        </ul>
+
+         <ul class="checklist secundario">
+            <li>{{TXT037}} <!-- Opera con finanzas éticas -->
+                <span class="check">{% if ind71 == "True" %}✔{% else %}✗{% endif %}</span>
+            </li>
+         </ul>
+
+    </section>
+
+    <section id="riqueza">
+        <img class="icono" src="../../static/img/reparto_justo_riqueza.png">
+        <h2 class="titulo">{{TXT050}}</h2> <!-- Reparto justo de la riqueza -->
+
+        <h3 class="titulo t1 text-center"> {{TXT051}} </h3> <!-- Fuentes de ingresos -->
+
+        <div id="ingresos"></div>
+
+        <div class="reparto">
+        <h3 class="titulo t2 text-center"> {{TXT055}} </h3> <!-- Reparto de beneficios -->
+
+         <div class="columnas">
+            {% if q1405 != "R1" %}
+                <div class="text-center">
+                    <span class="cifra cifra3">{% if q1405 != "nan" %}{{q1405 | subrender}}€{% else %}*{% endif%}</span>
+                    <span class="label label1">{{TXT056}}</span> <!-- A empresas o personas socias -->
+                    <span class="description"></span>
+                </div>
+
+                <div class="text-center">
+                    <span class="cifra cifra3">{% if q1406 != "nan" %}{{q1406 | subrender}}€{% else %}*{% endif%}</span>
+                    <span class="label label1">{{TXT057}}</span> <!-- A compensación de pérdidas -->
+                    <span class="description"></span>
+                </div>
+
+                <div class="text-center">
+                    <span class="cifra cifra3">{% if q1413 != "nan" %}{{q1413 | subrender}}€{% else %}*{% endif%}</span>
+                    <span class="label label1">{{TXT058}}</span> <!-- A reservas -->
+                    <span class="description"></span>
+                </div>
+            {% else %}
+                <div class="text-center"></div>
+                <div class="text-center">
+                    <span class="cifra cifra3">*</span>
+                    <span class="description">* {{R1}}</span> <!-- No corresponde porque no se han tenido beneficios este año -->
+                </div>
+                <div class="text-center"></div>
+            {% endif %}
+        </div>
+        </div>
+
+    </section>
+</div>
+
+<footer>
+    <div class="leyenda">
+        <div>✔={{TXT076}}</div>
+        <div>✗={{TXT077}}</div>
+    </div>
+    <div class="seccion promueve">
+        <span>{{TXT060|upper}}</span> <!-- PROMUEVE -->
+        <div class="logos">
+            {% if logo_reas %}<img src="{{logo_reas}}">{% endif %}
+            {% if logo_mercado %}<img src="{{logo_mercado}}">{% endif %}
+            <img src="../../static/img/reas.svg">
+        </div>
+    </div>
+    <div class="seccion enlaces">
+        {{web}}<br>
+        {{email}}<br>
+        reas.red | www.mercadosocial.net
+    </div>
+    <div class="seccion colabora">
+        <span>{{TXT061|upper}}</span> <!-- COLABORA -->
+        <div class="logos">
+            <img src="../../static/img/ministerio_trabajo.jpg">
+        </div>
+    </div>
+</footer>
+
+<script type="text/javascript">
+    Highcharts.chart('ingresos', {
+        accessibility: {
+            enabled: false
+        },
+        chart: {
+            backgroundColor: 'transparent',
+            type: 'pie'
+        },
+        title: {
+            text: ''
+        },
+         navigation: {
+            buttonOptions: {
+                enabled: false
+            }
+        },
+        plotOptions: {
+            series: {
+                enableMouseTracking: false,
+                animation: false,
+                borderRadius: 0,
+                dataLabels: {
+                    enabled: true,
+                    crop: false,
+                    overflow: 'none',
+                    formatter: function(){ // your condition/check
+                      if(this.y !== 0){
+                        return '<div class="chart-text"><span class="cifra3">%' + this.y + '</span><br>' + this.point.name + '</div>';
+                      }
+                    }
+                }
+            },
+            pie: {
+                size: '100%',
+                borderWidth:0,
+                startAngle:
+                            {% if ([ind6|int, ind7|int, ind67agru|int] | reject("==", 0) | list | count) != 0 %}
+                                {% if ([ind6|int, ind7|int, ind67agru|int] | reject("==", 0) |  reject("<", 40) | list | count) == 2 %}
+                                    0,
+                                {% elif  ([ind6|int, ind7|int, ind67agru|int] | reject("==", 0) |  reject("<", 40) | list | count) == 1 %}
+                                    90,
+                                {% else %}
+                                    {{ 90 + (([ind6|int, ind7|int, ind67agru|int] | reject("==", 0) | min) * 36 / 10) }},
+                                {% endif %}
+                            {% else %}
+                                45,
+                            {% endif %}
+                dataLabels: {
+                    connectorShape: function(labelPosition, connectorPosition, options) {
+                        // Let the built-in crookedLine function do the heavy lifting
+                        const path = Highcharts.seriesTypes
+                            .pie
+                            .prototype
+                            .pointClass
+                            .prototype
+                            .connectorShapes
+                            .crookedLine
+                            .call(this, labelPosition, connectorPosition, options);
+
+                        const labelWidth = this.dataLabel.getBBox().width;
+                        if (labelPosition.alignment === 'right') {
+                            path[0][1] -= labelWidth;
+                        } else {
+                            path.push(['M', path[0][1], path[0][2]]);
+                            path.push(['L', path[0][1] + labelWidth, path[0][2]]);
+                        }
+
+                        return path;
+                    },
+                    crop: false,
+                    overflow: 'none',
+                    useHTML: true
+                }
+            }
+        },
+        series: [
+            {
+                name: 'Percentage',
+                colorByPoint: true,
+                data: [
+                    {
+                        color:'#c42f43',
+                        name: '{{TXT052}}', // Facturación
+                        y: {{ ind6 if ind6 != "nan" else 0 }}
+                    },
+                    {
+                        color:'#d56473',
+                        name: '{{TXT053}}', // Subvenciones
+                        y: {{ ind7 if ind7 != "nan" else 0 }}
+                    },
+                    {
+                        color:'#ff9fac',
+                        name: '{{TXT054}}', // Otras
+                        y: {{ ind67agru if ind67agru != "nan" else 0 }}
+                    }
+                ]
+            }
+        ]
+    });
+
+    function redrawChart(){
+        var chart = Highcharts.charts[0];
+
+        var ingresos = document.getElementById('ingresos');
+        var container = document.getElementById('riqueza');
+        var w = container.offsetWidth;
+        if (chart) {
+          chart.setSize(w, w * (2/5), false);
+        }
+    }
+
+    window.addEventListener('resize', redrawChart);
+    redrawChart();
+
+    var ingresosDiv = document.getElementById('ingresos');
+
+    // Use html2canvas to rasterize the div
+<!--    html2canvas(ingresosDiv, {backgroundColor:null}).then(function (canvas) {-->
+<!--        // Convert the canvas to a data URL-->
+<!--        var imgData = canvas.toDataURL('image/png');-->
+
+<!--        // Create an image element and set the data URL as its source-->
+<!--        var img = document.createElement('img');-->
+<!--        img.src = imgData;-->
+<!--        img.style.width = '100%';-->
+
+<!--        // Replace the contents of the div with the image data-->
+<!--        ingresosDiv.innerHTML = '';-->
+<!--        ingresosDiv.appendChild(img);-->
+<!--    });-->
+</script>
+
+</body>
+</html>
+

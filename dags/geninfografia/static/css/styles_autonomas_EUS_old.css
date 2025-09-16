@@ -1,0 +1,512 @@
+@font-face {
+  font-family: "Veneer Three";
+  src: url("../fonts/Veneer Three.woff");
+  font-weight: 400;
+  font-style: normal; }
+
+@font-face {
+  font-family: "Wingding";
+  src: url("../fonts/wingding.ttf");
+  font-weight: 400;
+  font-style: normal; }
+
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("../fonts/SourceSansPro-Regular.ttf");
+  font-weight: 400;
+  font-style: normal; }
+
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("../fonts/SourceSansPro-Italic.ttf");
+  font-weight: 400;
+  font-style: italic; }
+
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("../fonts/SourceSansPro-ExtraLight.ttf");
+  font-weight: 200;
+  font-style: normal; }
+
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("../fonts/SourceSansPro-ExtraLightItalic.ttf");
+  font-weight: 200;
+  font-style: italic; }
+
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("../fonts/SourceSansPro-Light.ttf");
+  font-weight: 300;
+  font-style: normal; }
+
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("../fonts/SourceSansPro-LightItalic.ttf");
+  font-weight: 300;
+  font-style: italic; }
+
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("../fonts/SourceSansPro-Semibold.ttf");
+  font-weight: 600;
+  font-style: normal; }
+
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("../fonts/SourceSansPro-SemiboldItalic.ttf");
+  font-weight: 600;
+  font-style: italic; }
+
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("../fonts/SourceSansPro-Bold.ttf");
+  font-weight: 700;
+  font-style: normal; }
+
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("../fonts/SourceSansPro-BoldItalic.ttf");
+  font-weight: 700;
+  font-style: italic; }
+
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("../fonts/SourceSansPro-Black.ttf");
+  font-weight: 900;
+  font-style: normal; }
+
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("../fonts/SourceSansPro-BlackItalic.ttf");
+  font-weight: 900;
+  font-style: italic; }
+
+*, *::after, *::before {
+  box-sizing: inherit; }
+
+html {
+  box-sizing: border-box;
+  font-family: 'Source Sans Pro', sans-serif;
+  line-height: 1.15;
+  text-size-adjust: 100%;
+  -ms-overflow-style: scrollbar;
+  height: 141.4vw;
+  font-size: 1vw;
+  background-color: #FFFFFF; }
+
+[tabindex='-1']:focus {
+  outline: 0 !important; }
+
+body {
+  height: 100%;
+  background: #FFFFFF;
+  position: relative; }
+  body:before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-image: url(../img/pattern.png), none;
+    background-size: 15%;
+    opacity: 0.05;
+    position: absolute;
+    top: 0;
+    left: 0; }
+
+html, body {
+  margin: 0;
+  padding: 0; }
+
+p, h1, h2, h3 {
+  margin: 0;
+  font-weight: normal; }
+
+footer {
+  background: #fff;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 7%; }
+  footer .seccion {
+    padding-top: 1rem;
+    float: left;
+    font-size: 1.2em; }
+    footer .seccion span {
+      margin-bottom: 0.8em;
+      display: block; }
+  footer .promueve {
+    width: 45%;
+    padding-left: 5%; }
+    footer .promueve .logos {
+      height: 125px; }
+      footer .promueve .logos > * {
+        float: left;
+        max-width: 33%;
+        padding-right: 5%; }
+  footer .enlaces {
+    font-size: 1.3em;
+    width: 33%;
+    font-weight: 600;
+    padding-top: 1.3em;
+    line-height: 1.6;
+    text-align: center; }
+  footer .colabora {
+    width: 22%;
+    padding-left: 4%;
+    padding-right: 5%; }
+    footer .colabora .logos {
+      height: 150px; }
+      footer .colabora .logos > * {
+        float: left;
+        width: 80%; }
+
+.text-center {
+  text-align: center; }
+
+.titulo {
+  font-family: Veneer Three;
+  font-size: 4vw;
+  line-height: 0.84; }
+
+.titulo em {
+  color: #85b23d;
+  font-style: normal; }
+
+.label {
+  text-transform: uppercase;
+  font-weight: 700; }
+  .label.label1 {
+    font-size: 1.3rem; }
+  .label.label2 {
+    font-size: 1.95rem; }
+  .label.label3 {
+    font-size: 1.6rem;
+    line-height: 0.95; }
+
+.cifra {
+  display: block;
+  font-weight: bold; }
+  .cifra small {
+    font-size: 0.43em; }
+
+.cifra1 {
+  font-size: 5.5rem;
+  font-weight: 800; }
+
+.cifra2 {
+  font-size: 4.2rem;
+  font-weight: 800; }
+
+.cifra3 {
+  font-size: 2.8rem; }
+
+.cifra4 {
+  font-size: 3.5rem;
+  font-weight: 800; }
+
+.personas-porcent {
+  position: absolute;
+  width: 9%;
+  top: 35%;
+  right: 50%;
+  bottom: 2.3vw;
+  text-align: right;
+  padding-right: 0.4vw;
+  border-right: 0.25vw solid #111; }
+  .personas-porcent p {
+    margin-top: 1.04rem;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    line-height: 1; }
+
+.personas {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  top: 2.5vw;
+  width: 100%;
+  padding-left: 1vw; }
+  .personas .label {
+    width: 15%;
+    align-self: center; }
+  .personas .cifra2 {
+    margin-bottom: -0.1em; }
+
+.personas-numero {
+  position: absolute;
+  width: 14%;
+  top: 35%;
+  left: 51%;
+  bottom: 2.3vw;
+  padding-left: 0.6vw;
+  border-left: 0.25vw solid #85b23d;
+  color: #85b23d;
+  padding-top: 0.31vw; }
+  .personas-numero p {
+    margin-top: 1.05rem; }
+
+.columna1 {
+  position: absolute;
+  height: 72%;
+  top: 21%;
+  width: 53.5vw;
+  border-right: 0.8vw solid #fff; }
+
+.columna2 {
+  position: absolute;
+  height: 72%;
+  top: 21%;
+  left: 53.5vw;
+  width: 46.5vw; }
+
+.columnas {
+  position: relative;
+  display: flex; }
+  .columnas > * {
+    flex: 1; }
+
+ul.checklist {
+  font-family: Veneer Three;
+  list-style: none;
+  padding: 0 3rem;
+  margin: 0;
+  line-height: 1.05;
+  font-size: 1.9vw;
+  position: absolute;
+  width: 100%;
+  right: 0; }
+  ul.checklist li {
+    margin: 0.4em;
+    padding-right: 0.5em;
+    position: relative; }
+  ul.checklist .check {
+    font-family: Wingdings;
+    font-size: 1.5em;
+    line-height: 0.7;
+    width: 1em;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    margin-top: -0.4em; }
+  ul.checklist .description {
+    font-family: Source Sans Pro;
+    position: absolute;
+    width: 30%;
+    right: 0;
+    font-size: 0.5em; }
+
+header {
+  display: block;
+  position: relative;
+  height: 21%;
+  background-color: #FFFFFF; }
+  header:before {
+    content: "";
+    position: absolute;
+    width: 50%;
+    top: 8%;
+    bottom: 8%;
+    left: 24.5%;
+    background-image: url(../img/corazon.png), none;
+    background-repeat: no-repeat; }
+  header .corazon {
+    position: absolute;
+    container-type: inline-size;
+    top: 4vw;
+    left: 3.6vw;
+    width: 20vw;
+    display: flex;
+    flex-flow: column;
+    height: 24vw; }
+    header .corazon .titulo {
+      font-size: 18cqw; }
+    header .corazon .logo-entidad {
+      flex: 1 1 auto;
+      background-size: contain;
+      background-position: center left;
+      background-repeat: no-repeat; }
+  header .mes {
+    position: absolute;
+    right: 3.6vw;
+    top: 4vw;
+    width: 30vw;
+    text-align: right; }
+  header .columnas {
+    position: absolute;
+    width: 34%;
+    height: 55%;
+    right: 0;
+    bottom: 0;
+    padding-left: 4%;
+    line-height: 1;
+    background-image: url(../img/colinas.png), none;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    color: #FFF; }
+    header .columnas .ingresos {
+      position: absolute;
+      width: 50%;
+      bottom: 0;
+      left: 0;
+      text-align: center;
+      padding-bottom: 5%; }
+    header .columnas .gastos {
+      position: absolute;
+      width: 50%;
+      bottom: 0;
+      right: 0;
+      text-align: center;
+      padding-bottom: 5%; }
+
+section {
+  border-bottom: 0.8vw solid #fff;
+  position: relative;
+  width: 100%; }
+  section:before {
+    content: "";
+    background-color: rgba(0, 200, 0, 0.1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; }
+  section .titulo {
+    position: absolute;
+    top: 6vw;
+    left: 40%;
+    right: 10%;
+    font-size: 3.5vw; }
+  section .checklist {
+    bottom: 10%; }
+  section .icono {
+    position: absolute;
+    width: 20%;
+    top: 4vw;
+    left: 17%; }
+
+#equidad {
+  color: #9165a1;
+  height: 35%;
+  padding: 3.5vw; }
+  #equidad .columnas {
+    top: 8vw;
+    width: 110%;
+    margin-left: -5%;
+    padding: 0 1rem; }
+
+#sostenibilidad {
+  color: #2a7840;
+  height: 37%; }
+  #sostenibilidad .titulo {
+    top: 4.5vw; }
+
+#trabajo {
+  color: #db9427;
+  height: 28%; }
+  #trabajo .titulo {
+    top: 6vw; }
+  #trabajo .icono {
+    top: 2.5vw; }
+  #trabajo .description {
+    width: 14%;
+    margin-top: -3em;
+    right: -1.5em; }
+
+#cooperacion {
+  color: #3ea4b7;
+  height: 46%; }
+  #cooperacion .secundario {
+    color: #cbc036; }
+  #cooperacion aside {
+    position: absolute;
+    width: 33%;
+    left: 53%;
+    top: 17vw; }
+  #cooperacion .icono {
+    width: 17%;
+    top: 10vw;
+    left: 10%; }
+    #cooperacion .icono.secundario {
+      left: 29%; }
+  #cooperacion .titulo {
+    left: 5.8%; }
+    #cooperacion .titulo.secundario {
+      left: 49%; }
+  #cooperacion .checklist {
+    width: 55%;
+    left: 0;
+    bottom: 10%; }
+  #cooperacion .checklist.secundario {
+    padding-right: 0;
+    width: 50%;
+    left: 45%;
+    bottom: 25%; }
+    #cooperacion .checklist.secundario li {
+      padding-right: 15%; }
+    #cooperacion .checklist.secundario .check {
+      position: absolute;
+      top: auto;
+      bottom: 0.5em; }
+
+#riqueza {
+  color: #c42f43;
+  height: 54%; }
+  #riqueza .icono {
+    width: 18%;
+    left: 8%; }
+  #riqueza .titulo {
+    top: 5.5vw;
+    left: 31%; }
+  #riqueza h3 {
+    font-size: 2.25vw;
+    color: #d56473; }
+    #riqueza h3.t1 {
+      top: 30%;
+      right: 0;
+      left: 0; }
+    #riqueza h3.t2 {
+      top: 0;
+      left: 0;
+      margin-bottom: 0.5em;
+      position: relative; }
+  #riqueza .reparto {
+    position: absolute;
+    width: 100%;
+    padding-left: 3vw;
+    padding-right: 3vw;
+    bottom: 3vw; }
+  #riqueza .columnas {
+    margin-left: -2.5%; }
+
+#ingresos {
+  overflow: visible !important;
+  position: absolute;
+  top: 40%;
+  width: 100%;
+  height: 50%; }
+
+.chart-text {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 1.4rem;
+  line-height: 0.9;
+  position: relative;
+  top: -1.9rem;
+  margin-left: 0.4rem;
+  padding-right: 0.8rem;
+  padding-bottom: 0.5rem; }
+  .chart-text .cifra3 {
+    font-size: 2.3rem;
+    color: #c42f43; }
+
+.highcharts-credits {
+  display: none; }
+
+.highcharts-container {
+  overflow: visible !important;
+  width: 100%;
+  height: 100%; }
+
+.highcharts-pie-series .highcharts-data-label-connector {
+  stroke: #c42f43;
+  stroke-width: 0.3rem; }

@@ -1,0 +1,78 @@
+@import 'styles';
+
+ul.checklist{
+  font-size: 1.9vw;
+
+  li{
+    padding-right: 0.5em;
+  }
+
+  .check {
+    line-height: 0.7;
+  }
+
+}
+
+section{
+  .titulo{
+    font-size: 3.5vw;
+  }
+
+  .checklist{
+    bottom:10%;
+  }
+
+}
+
+#equidad{
+  .columnas{
+    top:8vw;
+  }
+}
+
+
+#trabajo{
+  .description {
+    width: 14%;
+    margin-top: -3em;
+    right: -1.5em;
+  }
+}
+
+#cooperacion{
+
+  aside{
+    width: 42%;
+    top:17vw;
+  }
+
+  .icono {
+    left: 10%;
+
+    &.secundario {
+        left:29%;
+    }
+  }
+
+  .titulo{
+    &.secundario{
+      left:49%;
+    }
+  }
+
+  .checklist{
+    bottom: 10%;
+  }
+
+  .checklist.secundario{
+    bottom: 30%;
+  }
+}
+
+#riqueza{
+
+  .reparto{
+    width:100%;
+    padding-right: 3vw;
+  }
+}
