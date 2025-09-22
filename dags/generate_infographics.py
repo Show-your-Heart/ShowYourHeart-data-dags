@@ -54,7 +54,7 @@ def move_dirs_to_historic(sftp_client):
         sftp_client.mkdir(historic_dir_path)
 
     for file in sftp_client.listdir(SFTP_ROOT):
-        logger.debug(f"Trying to move {file} to historic dir.")
+        logger.info(f"Trying to move {file} to historic dir.")
         if stat.S_ISDIR(sftp_client.stat(file).st_mode) and file != historic_dir:
             # Move all directories inside the historic_dir
             logger.info(f"Moving directory {file} to directory '{historic_dir}'")
