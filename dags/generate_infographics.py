@@ -1,5 +1,5 @@
 from airflow import DAG
-from airflow.operators.python import PythonOperator, PythonVirtualenvOperator
+from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
 from airflow.decorators import task
 from airflow.models import Variable
@@ -62,10 +62,6 @@ def move_dirs_to_historic(sftp_client):
             sftp_client.rename(file_abs_path, os.path.join(historic_dir_path, filename))
 
 def geninfo(tmp_dir_name, allowed_data_filenames):
-    # Running inside virtualenv.
-    import os
-    from airflow.models import Variable
-
     selenium_host = Variable.get("selenium_host")
     selenium_port = Variable.get("selenium_port")
 
@@ -116,14 +112,13 @@ with DAG("generate_infographics",
         email=Variable.get("mail_zulip"),
     )
 
-    generar_infografias = PythonVirtualenvOperator(
+    generar_infografias = PythonOperator(
         task_id="generar_infografias",
         python_callable=geninfo,
         op_kwargs = {
             "tmp_dir_name": "{{ ti.xcom_pull(key='tmp_dir') }}",
             "allowed_data_filenames": ALLOWED_DATA_FILENAMES
         },
-        requirements=(lambda: open("/opt/airflow/dags/geninfografia/requirements.txt").readlines())(),
         email_on_failure=True,
         email=Variable.get("mail_zulip"),
     )
