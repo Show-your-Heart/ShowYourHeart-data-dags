@@ -53,12 +53,13 @@ def move_dirs_to_historic(sftp_client):
         # Create dir if not exists
         sftp_client.mkdir(historic_dir_path)
 
-    for file in sftp_client.listdir(SFTP_ROOT):
-        logger.info(f"Trying to move {file} to historic dir.")
-        if stat.S_ISDIR(sftp_client.stat(file).st_mode) and file != historic_dir:
+    for filename in sftp_client.listdir(SFTP_ROOT):
+        logger.info(f"Trying to move '{filename}' to historic dir.")
+        file_abs_path = os.path.join(SFTP_ROOT, filename)
+        if stat.S_ISDIR(sftp_client.stat(file_abs_path).st_mode) and filename != historic_dir:
             # Move all directories inside the historic_dir
-            logger.info(f"Moving directory {file} to directory '{historic_dir}'")
-            sftp_client.rename(os.path.join(SFTP_ROOT, file), os.path.join(historic_dir_path, file))
+            logger.info(f"Moving directory {filename} to directory '{historic_dir}'")
+            sftp_client.rename(file_abs_path, os.path.join(historic_dir_path, filename))
 
 def geninfo(tmp_dir_name, allowed_data_filenames):
     # Running inside virtualenv.
