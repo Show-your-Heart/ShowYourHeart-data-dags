@@ -148,7 +148,7 @@ def exportar_infografias(output_path, nif, regenerate, selenium_host, selenium_p
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     options.add_argument('--log-level=3')
 
-    with webdriver.Remote(f"http://{selenium_host}:{selenium_port}/wd/hub", options=options) as driver:
+    with webdriver.Remote(f"http://{selenium_host}:{selenium_port}/", options=options) as driver:
         html_path = os.path.join(ROOT_DIR, output_path, "html")
         total_tasks = get_file_count(html_path)
         territories_dirs = os.listdir(html_path)
