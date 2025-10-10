@@ -14,7 +14,6 @@ logger = logging.getLogger(__name__)
 from datetime import datetime
 
 SFTP_ROOT = Variable.get("sftp_root")
-ALLOWED_DATA_FILENAMES = ["datos_entidades.csv", "datos_autonomas.csv"]
 
 def get_sftp_client():
     ssh = paramiko.SSHClient()
@@ -33,7 +32,7 @@ def begin(ti, logical_date):
     sftp_client = get_sftp_client()
 
     files = sftp_client.listdir(SFTP_ROOT)
-    data_files = [file for file in files if file in ALLOWED_DATA_FILENAMES]
+    data_files = [file for file in files if file.split(".")[-1] == "csv"]
 
     if not data_files:
         raise AirflowSkipException
@@ -116,8 +115,7 @@ with DAG("generate_infographics",
         task_id="generar_infografias",
         python_callable=geninfo,
         op_kwargs = {
-            "tmp_dir_name": "{{ ti.xcom_pull(key='tmp_dir') }}",
-            "allowed_data_filenames": ALLOWED_DATA_FILENAMES
+            "tmp_dir_name": "{{ ti.xcom_pull(key='tmp_dir') }}"
         },
         email_on_failure=True,
         email=Variable.get("mail_zulip"),
