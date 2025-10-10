@@ -151,7 +151,7 @@ def exportar_infografias(output_path, nif, regenerate, selenium_host, selenium_p
     with webdriver.Remote(f"http://{selenium_host}:{selenium_port}/wd/hub", options=options) as driver:
         html_path = os.path.join(ROOT_DIR, output_path, "html")
         total_tasks = get_file_count(html_path)
-        territories_dirs = os.listdir(html_path)
+        territories_dirs = [file for file in os.listdir(html_path) if file != "static"]
         for territory in territories_dirs:
             if not custom_props["TERRITORIOS"] or territory.upper() in custom_props["TERRITORIOS"]:
                 lang_dirs = os.listdir(f"{html_path}/{territory}")
@@ -189,8 +189,9 @@ def get_file_count(path):
 
     for root, dirs, files in os.walk(path):
         for file in files:
-            file_path = os.path.join(root, file)
-            file_list.append(file_path)
+            if file.split(".")[-1] == "html":
+                file_path = os.path.join(root, file)
+                file_list.append(file_path)
 
     return len(file_list)
 
