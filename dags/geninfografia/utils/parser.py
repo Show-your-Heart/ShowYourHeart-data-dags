@@ -1,10 +1,16 @@
 import os
 import pandas as pd
-
+import logging
+logger = logging.getLogger(__name__)
 
 class Parser:
 
-    int_properties = ["ind3d", "ind3h", "ind3a", "ind20d",
+    info_properties = ["Codigo Territorio", "código entidad", "Correo electrónico", "Público?",
+                       "Idioma", "auditoria/balance", "Logo", "NIF", "Nombre"]
+
+    ignore_properties = ["nan", "Código", "titulo de la lista", "titulo del gráfico", "titulo del gráfico"]
+
+    int_properties = ["ind3d", "ind3h", "ind3a", "ind20d", "ind2",
                       "ind97", "q1203", "q1201", "q1405",
                       "q1406", "q1413", "ind254", "ind6",
                       "ind7", "ind67agru", "ind1d", "ind1h", "ind1a",
@@ -23,6 +29,8 @@ class Parser:
                           "q4106c", "ind62agrupado", "q6813a", "q6813b",
                           "q6813c", "q6813d", "q1415e", "q1415f", "q1415a"]
 
+    combined_properties = ["ind27", "q0107", "q0101agrupada"] # Can be both numeric or text
+
     def parse_infografias(self, data_file):
         territories = self.parse_territories()
         df = pd.read_csv(data_file, encoding="utf-8")
@@ -30,6 +38,7 @@ class Parser:
         data = df.values
 
         props = [columns[1]] + df[columns[1]].to_list()
+        self.validate_props(props)
 
         entities = []
         for entity_index, territory_code in enumerate(columns[4:]):
@@ -64,6 +73,13 @@ class Parser:
             territories[row["Código"]]["email"] = row["email"]
 
         return territories
+
+    def validate_props(self, props):
+        all_properties = self.info_properties + self.int_properties + self.float_properties + self.boolean_properties + self.combined_properties + self.ignore_properties
+        for prop in props:
+            if prop not in all_properties:
+                logger.warning(f"La propiedad {prop} no está registrada y puede causar errores.")
+
 
     def parse_value(self, prop_name, value):
         if prop_name in self.int_properties:
