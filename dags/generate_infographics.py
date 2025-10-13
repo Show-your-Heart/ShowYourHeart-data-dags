@@ -60,14 +60,14 @@ def move_dirs_to_historic(sftp_client):
             logger.info(f"Moving directory {filename} to directory '{historic_dir}'")
             sftp_client.rename(file_abs_path, os.path.join(historic_dir_path, filename))
 
-def geninfo(tmp_dir_name, allowed_data_filenames):
+def geninfo(tmp_dir_name):
     selenium_host = Variable.get("selenium_host")
     selenium_port = Variable.get("selenium_port")
 
     from geninfografia import generar_infografias
-    for file in os.listdir(tmp_dir_name):
-        if file in allowed_data_filenames:
-            generar_infografias.run(os.path.join(tmp_dir_name, file), tmp_dir_name, regenerate=True, selenium_host=selenium_host, selenium_port=selenium_port)
+    data_files = [file for file in  os.listdir(tmp_dir_name) if file.split(".")[-1] == "csv"]
+    for file in data_files:
+        generar_infografias.run(os.path.join(tmp_dir_name, file), tmp_dir_name, regenerate=True, selenium_host=selenium_host, selenium_port=selenium_port)
 
 def end(ti):
     execution_datetime = ti.xcom_pull(key="execution_datetime")
