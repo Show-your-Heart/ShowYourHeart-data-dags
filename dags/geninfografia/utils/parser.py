@@ -78,7 +78,7 @@ class Parser:
         all_properties = self.info_properties + self.int_properties + self.float_properties + self.boolean_properties + self.combined_properties + self.ignore_properties
         for prop in props:
             if prop not in all_properties:
-                logger.warning(f"La propiedad {prop} no está registrada y puede causar errores.")
+                logger.warning(f"La propiedad '{prop}' no está registrada y puede causar errores.")
 
 
     def parse_value(self, prop_name, value):
