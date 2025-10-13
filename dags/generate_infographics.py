@@ -67,7 +67,9 @@ def geninfo(tmp_dir_name):
     from geninfografia import generar_infografias
     data_files = [file for file in  os.listdir(tmp_dir_name) if file.split(".")[-1] == "csv"]
     for file in data_files:
-        generar_infografias.run(os.path.join(tmp_dir_name, file), tmp_dir_name, regenerate=True, selenium_host=selenium_host, selenium_port=selenium_port)
+        data_file = os.path.join(tmp_dir_name, file)
+        logger.info(f"Iniciando script para generar infografías a partir del fichero de datos: {data_file}")
+        generar_infografias.run(data_file, tmp_dir_name, regenerate=True, selenium_host=selenium_host, selenium_port=selenium_port)
 
 def end(ti):
     execution_datetime = ti.xcom_pull(key="execution_datetime")
