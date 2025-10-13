@@ -314,7 +314,7 @@ def run(data_file, output_path="infografias", entity_name=None, regenerate=False
         entity_name = find_best_match(entity_name, [entity["Nombre"] for entity in entities_data])
         nif_to_export = next((entity["NIF"] for entity in entities_data if entity["Nombre"] == entity_name))
 
-    mode = re.search(r".*datos_(.*).csv", data_file).group(1)
+    mode = re.search(r".* (.*).csv", data_file).group(1)
     generar_infografias(output_path, mode, entities_data, entity_name, regenerate)
     copy_static_files(output_path)
 
