@@ -20,10 +20,11 @@ class Translations:
     EUS = Lang('eus', "Euskera")
     GAL = Lang('gal', "Galego")
     AST = Lang('ast', "Asturianu")
+    EN = Lang('en', "English")
 
     def generate_translations(self, langs=None):
         if not langs:
-            langs = [self.CAS, self.CAT, self.EUS, self.GAL, self.AST]
+            langs = [self.CAS, self.CAT, self.EUS, self.GAL, self.AST, self.EN]
 
         for lang in langs:
             output_filename = f"{self.translations_dir}/{lang.code}.json"
