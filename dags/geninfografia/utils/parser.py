@@ -10,7 +10,9 @@ class Parser:
 
     ignore_properties = ["nan", "Código", "titulo de la lista", "titulo del gráfico", "titulo del gráfico"]
 
-    int_properties = ["ind3d", "ind3h", "ind3a", "ind20d", "ind2",
+    int_properties = ["ind2"]
+
+    int_properties_short = ["ind3d", "ind3h", "ind3a", "ind20d",
                       "ind97", "q1203", "q1201", "q1405",
                       "q1406", "q1413", "ind254", "ind6",
                       "ind7", "ind67agru", "ind1d", "ind1h", "ind1a",
@@ -24,7 +26,7 @@ class Parser:
                           "q4104d", "q5305a", "q5305b", "q5305c",
                           "q5305d", "ind71", "ind105", "ind78", "ind80",
 
-                          "q3406c", "q3406a", "q3406d", "q5305a", "q5305b",
+                          "q3406c", "q3406a", "q3406d", "q3406b", "q5305a", "q5305b",
                           "q5305c", "q5305d", "ind71", "q4106a", "q4106d",
                           "q4106c", "ind62agrupado", "q6813a", "q6813b",
                           "q6813c", "q6813d", "q1415e", "q1415f", "q1415a"]
@@ -75,15 +77,17 @@ class Parser:
         return territories
 
     def validate_props(self, props):
-        all_properties = self.info_properties + self.int_properties + self.float_properties + self.boolean_properties + self.combined_properties + self.ignore_properties
+        all_properties = self.info_properties + self.int_properties_short + self.int_properties + self.float_properties + self.boolean_properties + self.combined_properties + self.ignore_properties
         for prop in props:
             if prop not in all_properties:
                 logger.warning(f"La propiedad '{prop}' no está registrada y puede causar errores.")
 
 
     def parse_value(self, prop_name, value):
-        if prop_name in self.int_properties:
-            return self.parse_number(value, number_type=int)
+        if prop_name in self.int_properties_short:
+            return self.parse_number(value, number_type=int, shorten=True)
+        elif prop_name in self.int_properties:
+            return self.parse_number(value, number_type=int, shorten=False)
         elif prop_name in self.float_properties:
             return self.parse_number(value, number_type=float)
         elif prop_name in self.boolean_properties:
@@ -91,10 +95,7 @@ class Parser:
         else:
             return value
 
-    def parse_number(self, value, number_type):
-        suffixes = ["", "<small>{{ TXT059 }}</small>", "M"]
-        suffix_index = 0
-
+    def parse_number(self, value, number_type, shorten=False):
         try:
             value = str(value)
             value = value.replace(" ", "")
@@ -108,13 +109,19 @@ class Parser:
         except ValueError:
             return value
 
-        while value >= 1000 and suffix_index < len(suffixes) - 1:
-            value /= 1000
-            suffix_index += 1
+        if shorten:
+            suffixes = ["", "<small>{{ TXT059 }}</small>", "M"]
+            suffix_index = 0
 
-        formatted_value = f"{value:,.1f}".rstrip('0').rstrip('.').replace('.', ',')
+            while value >= 1000 and suffix_index < len(suffixes) - 1:
+                value /= 1000
+                suffix_index += 1
 
-        return f"{formatted_value}{suffixes[suffix_index]}"
+            formatted_value = f"{value:,.1f}".rstrip('0').rstrip('.').replace('.', ',')
+            return f"{formatted_value}{suffixes[suffix_index]}"
+        else:
+            formatted_value = f"{value:,.2f}".rstrip('0').rstrip('.').replace('.', '*').replace(',', '.').replace('*', ',')
+            return f"{formatted_value}"
 
     def parse_boolean(self, value):
         if str(value).lower() == "si":
