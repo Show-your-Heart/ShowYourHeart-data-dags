@@ -111,32 +111,32 @@ def loadanswers(campaign):
             , coalesce(i.description_fr, i.description) as indicator_description_fr
             , i.is_direct_indicator, i.category as indicator_category, i.data_type as indicator_data_type, i.unit as indicator_unit
             , sml.id as list_item_id
-            , sml.title as list_item_title
-            , coalesce(sml.title_en, sml.title) as list_item_title_en
-            , coalesce(sml.title_ca, sml.title) as list_item_title_ca
-            , coalesce(sml.title_gl, sml.title) as list_item_title_gl
-            , coalesce(sml.title_eu, sml.title) as list_item_title_eu
-            , coalesce(sml.title_es, sml.title) as list_item_title_es
-            , coalesce(sml.title_nl, sml.title) as list_item_title_nl
-            , coalesce(sml.title_fr, sml.title) as list_item_title_fr
+            , replace(sml.title,'"','″') as list_item_title
+            , replace(coalesce(sml.title_en, sml.title),'"','″') as list_item_title_en
+            , replace(coalesce(sml.title_ca, sml.title),'"','″') as list_item_title_ca
+            , replace(coalesce(sml.title_gl, sml.title),'"','″') as list_item_title_gl
+            , replace(coalesce(sml.title_eu, sml.title),'"','″') as list_item_title_eu
+            , replace(coalesce(sml.title_es, sml.title),'"','″') as list_item_title_es
+            , replace(coalesce(sml.title_nl, sml.title),'"','″') as list_item_title_nl
+            , replace(coalesce(sml.title_fr, sml.title),'"','″') as list_item_title_fr
             , g1.id as g1_id
-            , g1.title as g1_title
-            , coalesce(g1.title_en, g1.title) as g1_title_en
-            , coalesce(g1.title_ca, g1.title) as g1_title_ca
-            , coalesce(g1.title_gl, g1.title) as g1_title_gl
-            , coalesce(g1.title_eu, g1.title) as g1_title_eu
-            , coalesce(g1.title_es, g1.title) as g1_title_es
-            , coalesce(g1.title_nl, g1.title) as g1_title_nl
-            , coalesce(g1.title_fr, g1.title) as g1_title_fr
+            , replace(g1.title,'"','″') as g1_title
+            , replace(coalesce(g1.title_en, g1.title),'"','″') as g1_title_en
+            , replace(coalesce(g1.title_ca, g1.title),'"','″') as g1_title_ca
+            , replace(coalesce(g1.title_gl, g1.title),'"','″') as g1_title_gl
+            , replace(coalesce(g1.title_eu, g1.title),'"','″') as g1_title_eu
+            , replace(coalesce(g1.title_es, g1.title),'"','″') as g1_title_es
+            , replace(coalesce(g1.title_nl, g1.title),'"','″') as g1_title_nl
+            , replace(coalesce(g1.title_fr, g1.title),'"','″') as g1_title_fr
             , g2.id as g2_id
-            , g2.title as g2_title
-            , coalesce(g2.title_en, g2.title) as g2_title_en
-            , coalesce(g2.title_ca, g2.title) as g2_title_ca
-            , coalesce(g2.title_gl, g2.title) as g2_title_gl
-            , coalesce(g2.title_eu, g2.title) as g2_title_eu
-            , coalesce(g2.title_es, g2.title) as g2_title_es
-            , coalesce(g2.title_nl, g2.title) as g2_title_nl
-            , coalesce(g2.title_fr, g2.title) as g2_title_fr
+            , replace(g2.title,'"','″') as g2_title
+            , replace(coalesce(g2.title_en, g2.title),'"','″') as g2_title_en
+            , replace(coalesce(g2.title_ca, g2.title),'"','″') as g2_title_ca
+            , replace(coalesce(g2.title_gl, g2.title),'"','″') as g2_title_gl
+            , replace(coalesce(g2.title_eu, g2.title),'"','″') as g2_title_eu
+            , replace(coalesce(g2.title_es, g2.title),'"','″') as g2_title_es
+            , replace(coalesce(g2.title_nl, g2.title),'"','″') as g2_title_nl
+            , replace(coalesce(g2.title_fr, g2.title),'"','″') as g2_title_fr
         from 
             syh_methods_campaign c 
             join syh_methods_campaign_methods mcm on mcm.campaign_id = c.id 
@@ -734,6 +734,8 @@ def loadanswers(campaign):
             group by id_campaign,  id_survey, id_method, id_user, id_organization, id_project
                 , id_methods_section, id_indicator, indicator_code, is_direct_indicator;
     
+            create index ci_caf on  external.answers_calc_agg_full  (id_campaign, id_method, id_organization);
+            CLUSTER external.answers_calc_agg_full USING ci_caf;
     
             commit;
         """
