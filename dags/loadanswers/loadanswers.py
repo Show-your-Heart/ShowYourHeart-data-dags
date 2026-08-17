@@ -7,9 +7,9 @@ def loadanswers(campaign):
     conndwh = BaseHook.get_connection('DWH').get_hook().get_sqlalchemy_engine()
 
     if campaign is None:
-        where = "and year>=(date_part('year', current_date)-1)::varchar"
+        where = " and year>=(date_part('year', current_date)-1)::varchar "
     else:
-        where = f"and year='{campaign}'"
+        where = f" and year='{campaign}' "
 
 
     qry =f"""
@@ -392,7 +392,7 @@ def loadanswers(campaign):
                 join syh_users_user u on s.user_id=u.id
                 join syh_methods_campaign c on s.campaign_id=c.id
         where 1=1
-        and {where};
+        {where};
          
           
         create index cix_op on  external.organization_project  (campaign_id, method_id) ;     
@@ -425,7 +425,7 @@ def loadanswers(campaign):
             select *
             from external.test_full_answers_organization_project ac
             where 1=1
-                and {where}
+                {where}
             ;
              
             commit;   
