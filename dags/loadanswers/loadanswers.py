@@ -423,7 +423,7 @@ def loadanswers(campaign):
             drop table if exists external.full_answers_organization_project_subconjunt;
             create table externalfull_answers_organization_project_subconjunt as
             select *
-            from external.test_full_answers_organization_project ac
+            from external.full_answers_organization_project ac
             where 1=1
                 {where}
             ;
@@ -721,7 +721,7 @@ def loadanswers(campaign):
                         when count(distinct g2_title)>0 then '["'||string_agg(value,'","' order by g2_title_fr, g1_title_fr)||'"]'
                         when count(distinct list_item_title)>0 then '['||string_agg(value,',' order by list_item_title)||']'
                         else string_agg(value,'') end as str_value_fr
-            from external.test_answers_calc_subconjunt
+            from external.answers_calc_subconjunt
             group by id_campaign,  id_survey, id_method, id_user, id_organization, id_project
                 , id_methods_section, id_indicator, indicator_code, is_direct_indicator;
     
