@@ -461,8 +461,9 @@ def loadanswers(campaign):
     print("FI methods_indicatorresult_unnest")
 
     qry = f"""
-            delete from external.answers_calc_subconjunt 
-            where 1=1 {where};
+            truncate table external.answers_calc_subconjunt ;
+            --delete from external.answers_calc_subconjunt 
+            --where 1=1 {where};
 
             commit;
         """
