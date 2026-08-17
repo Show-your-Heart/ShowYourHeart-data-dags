@@ -519,8 +519,12 @@ def loadanswers(campaign):
     print("FI insert answers_calc_subconjunt")
 
     qry = f"""
-            drop table if exists external.answers_calc_agg_full;
-            create table external.answers_calc_agg_full as
+            delete from external.answers_calc_agg_full
+            where 1=1 
+            {where};
+            ;
+            
+            insert into external.answers_calc_agg_full as
             select id_campaign
                 , max(campaign_name) as campaign_name
                 , max(campaign_name_en) as campaign_name_en
@@ -731,11 +735,13 @@ def loadanswers(campaign):
                         when count(distinct list_item_title)>0 then '['||string_agg(value,',' order by list_item_title)||']'
                         else string_agg(value,'') end as str_value_fr
             from external.answers_calc_subconjunt
+            where 1=1
+            {where}
             group by id_campaign,  id_survey, id_method, id_user, id_organization, id_project
                 , id_methods_section, id_indicator, indicator_code, is_direct_indicator;
     
-            create index ci_caf on  external.answers_calc_agg_full  (id_campaign, id_method, id_organization);
-            CLUSTER external.answers_calc_agg_full USING ci_caf;
+            --create index ci_caf on  external.answers_calc_agg_full  (id_campaign, id_method, id_organization);
+            --CLUSTER external.answers_calc_agg_full USING ci_caf;
     
             commit;
         """
