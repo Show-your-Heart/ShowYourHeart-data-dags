@@ -421,7 +421,7 @@ def loadanswers(campaign):
 
     qry = f"""
             drop table if exists external.full_answers_organization_project_subconjunt;
-            create table externalfull_answers_organization_project_subconjunt as
+            create table external.full_answers_organization_project_subconjunt as
             select *
             from external.full_answers_organization_project ac
             where 1=1
