@@ -522,9 +522,9 @@ def loadanswers(campaign):
             delete from external.answers_calc_agg_full
             where 1=1 
             {where};
-            ;
             
-            insert into external.answers_calc_agg_full as
+            
+            insert into external.answers_calc_agg_full
             select id_campaign
                 , max(campaign_name) as campaign_name
                 , max(campaign_name_en) as campaign_name_en
