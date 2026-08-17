@@ -519,7 +519,7 @@ def loadanswers(campaign):
     print("FI insert answers_calc_subconjunt")
 
     qry = f"""
-            drop  table external.answers_calc_agg_full;
+            drop table if not exists external.answers_calc_agg_full;
             create table external.answers_calc_agg_full as
             select id_campaign
                 , max(campaign_name) as campaign_name
