@@ -331,6 +331,7 @@ def loadanswers(campaign):
         commit;
     """
     executequery(qry, conndwh)
+    print("FI full_answers")
 
     qry = f"""
         drop table if exists external.method_section_hieriarchy;
@@ -377,6 +378,7 @@ def loadanswers(campaign):
         commit;
     """
     executequery(qry, conndwh)
+    print("FI update full_answers")
 
     qry = f"""
         
@@ -405,6 +407,7 @@ def loadanswers(campaign):
         commit;
     """
     executequery(qry, conndwh)
+    print("FI organization_project")
 
     qry = f"""
             drop table if exists external.full_answers_organization_project;
@@ -418,6 +421,7 @@ def loadanswers(campaign):
             commit;
         """
     executequery(qry, conndwh)
+    print("FI full_answers_organization_project")
 
     qry = f"""
             drop table if exists external.full_answers_organization_project_subconjunt;
@@ -431,6 +435,7 @@ def loadanswers(campaign):
             commit;   
             """
     executequery(qry, conndwh)
+    print("FI full_answers_organization_project_subconjunt")
 
     qry = f"""
             create index cix_aops on  external.full_answers_organization_project_subconjunt  (id_indicator, id_survey);
@@ -439,10 +444,11 @@ def loadanswers(campaign):
             commit;
         """
     executequery(qry, conndwh)
+    print("FI cix_aops")
 
     qry = f"""
             drop table if exists external.methods_indicatorresult_unnest;
-            create table external._methods_indicatorresult_unnest as
+            create table external.methods_indicatorresult_unnest as
             select  indicator_id, survey_id, gender, group_item_id, group_2_item_id , unnest(string_to_array(value,'|')) as value_unnest
             from syh_methods_indicatorresult;
             
@@ -452,6 +458,7 @@ def loadanswers(campaign):
             commit;
           """
     executequery(qry, conndwh)
+    print("FI methods_indicatorresult_unnest")
 
     qry = f"""
             delete from external.answers_calc_subconjunt 
@@ -460,6 +467,7 @@ def loadanswers(campaign):
             commit;
         """
     executequery(qry, conndwh)
+    print("FI delete answers_calc_subconjunt")
 
     qry = f"""
                 
@@ -508,6 +516,7 @@ def loadanswers(campaign):
         commit;
         """
     executequery(qry, conndwh)
+    print("FI insert answers_calc_subconjunt")
 
     qry = f"""
             drop  table external.answers_calc_agg_full;
@@ -729,3 +738,4 @@ def loadanswers(campaign):
             commit;
         """
     executequery(qry, conndwh)
+    print("FI answers_calc_agg_full")
