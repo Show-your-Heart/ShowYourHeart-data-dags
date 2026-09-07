@@ -450,6 +450,7 @@ def loadanswers(campaign):
             drop table if exists external.methods_indicatorresult_unnest;
             create table external.methods_indicatorresult_unnest as
             select  indicator_id, survey_id, gender, group_item_id, group_2_item_id , unnest(string_to_array(value,'|')) as value_unnest
+            , instance_number
             from syh_methods_indicatorresult;
             
             create index ci_mir on  external.methods_indicatorresult_unnest  (indicator_id, survey_id);
@@ -475,6 +476,7 @@ def loadanswers(campaign):
         insert into  external.answers_calc_subconjunt 
         select s.*
         , case when u.value_unnest is not null then '1' else '0'end as value, gender::text
+        , u.instance_number
         from  external.full_answers_organization_project_subconjunt s
             left join external.methods_indicatorresult_unnest u
                 on s.id_survey=u.survey_id 
@@ -484,6 +486,7 @@ def loadanswers(campaign):
         union all
         select s.*
         , value_unnest::text as value, gender::text
+         , u.instance_number
         from  external.full_answers_organization_project_subconjunt s
             left join external.methods_indicatorresult_unnest u
                 on s.id_survey=u.survey_id 
@@ -494,6 +497,7 @@ def loadanswers(campaign):
         union all
         select s.*
         , value_unnest::text as value, gender::text
+         , u.instance_number
         from  external.full_answers_organization_project_subconjunt s
             left join external.methods_indicatorresult_unnest u
                 on s.id_survey=u.survey_id 
@@ -505,6 +509,7 @@ def loadanswers(campaign):
         union all	
         select s.*
         , value_unnest::text as value, gender::text
+        , u.instance_number
         from  external.full_answers_organization_project_subconjunt s
             left join external.methods_indicatorresult_unnest u
                 on s.id_survey=u.survey_id 
@@ -735,11 +740,19 @@ def loadanswers(campaign):
                         when count(distinct g2_title)>0 then '["'||string_agg(value,'","' order by g2_title_fr, g1_title_fr)||'"]'
                         when count(distinct list_item_title)>0 then '['||string_agg(value,',' order by list_item_title)||']'
                         else string_agg(value,'') end as str_value_fr
-            from external.answers_calc_subconjunt
+                    , coalesce(i.code, '') as set_code, ac.instance_number
+            from external.answers_calc_subconjunt ac
+            left join (
+                select distinct i.indicator_id, smi.code
+                from {{ source('dwhpublic', 'syh_methods_indicatorsset_indicators')}} i
+                join {{ source('dwhpublic', 'syh_methods_indicatorsset')}} smi on i.indicatorsset_id=smi.id
+            ) i on ac.id_indicator=i.indicator_id
             where 1=1
             {where}
             group by id_campaign,  id_survey, id_method, id_user, id_organization, id_project
-                , id_methods_section, id_indicator, indicator_code, is_direct_indicator;
+                , id_methods_section, id_indicator, indicator_code, is_direct_indicator
+                , coalesce(i.code, ''), ac.instance_number
+                ;
     
             --create index ci_caf on  external.answers_calc_agg_full  (id_campaign, id_method, id_organization);
             --CLUSTER external.answers_calc_agg_full USING ci_caf;
