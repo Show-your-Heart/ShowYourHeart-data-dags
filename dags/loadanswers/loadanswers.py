@@ -744,8 +744,8 @@ def loadanswers(campaign):
             from external.answers_calc_subconjunt ac
             left join (
                 select distinct i.indicator_id, smi.code
-                from {{ source('dwhpublic', 'syh_methods_indicatorsset_indicators')}} i
-                join {{ source('dwhpublic', 'syh_methods_indicatorsset')}} smi on i.indicatorsset_id=smi.id
+                from syh_methods_indicatorsset_indicators i
+                join syh_methods_indicatorsset' smi on i.indicatorsset_id=smi.id
             ) i on ac.id_indicator=i.indicator_id
             where 1=1
             {where}
