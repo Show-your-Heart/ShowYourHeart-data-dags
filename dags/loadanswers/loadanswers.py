@@ -745,7 +745,7 @@ def loadanswers(campaign):
             left join (
                 select distinct i.indicator_id, smi.code
                 from syh_methods_indicatorsset_indicators i
-                join syh_methods_indicatorsset' smi on i.indicatorsset_id=smi.id
+                join syh_methods_indicatorsset smi on i.indicatorsset_id=smi.id
             ) i on ac.id_indicator=i.indicator_id
             where 1=1
             {where}
