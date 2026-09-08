@@ -449,7 +449,8 @@ def loadanswers(campaign):
     qry = f"""
             drop table if exists external.methods_indicatorresult_unnest;
             create table external.methods_indicatorresult_unnest as
-            select  indicator_id, survey_id, gender, group_item_id, group_2_item_id , unnest(string_to_array(value,'|')) as value_unnest
+            select  indicator_id, survey_id, gender, group_item_id, group_2_item_id
+            , unnest(string_to_array(value,'|')) as value_unnest
             , instance_number
             from syh_methods_indicatorresult;
             
@@ -683,7 +684,8 @@ def loadanswers(campaign):
                         when '1' then '"Femmes"'
                         when '2' then '"Non binaires"'
                         end::varchar,',' order by gender)||']' end as str_gender_fr
-                , case when count(distinct g2_title)>0 then '["'||string_agg(concat(g2_title,' ◻️ ', g1_title),'","' order by g2_title, g1_title)||'"]'
+                
+               , case when count(distinct g2_title)>0 then '["'||string_agg(concat(g2_title,' ◻️ ', g1_title),'","' order by g2_title, g1_title)||'"]'
                     when count(distinct list_item_title)>0 then '["'||string_agg(list_item_title,'","' order by list_item_title)||'"]'
                     end as str_list
                 , case when count(distinct g2_title)>0 then '["'||string_agg(concat(g2_title_en,' ◻️ ', g1_title_en),'","' order by g2_title, g1_title)||'"]'
@@ -707,6 +709,7 @@ def loadanswers(campaign):
                 , case when count(distinct g2_title)>0 then '["'||string_agg(concat(g2_title_fr,' ◻️ ', g1_title_fr),'","' order by g2_title, g1_title)||'"]'
                     when count(distinct list_item_title)>0 then '["'||string_agg(list_item_title_fr,'","' order by list_item_title)||'"]'
                      end as str_list_fr
+   
                     , count(distinct list_item_title)
                 , case when count(distinct gender)>0 then '['||string_agg(value,',' order by gender)||']'
                         when count(distinct g2_title)>0 then '["'||string_agg(value,'","' order by g2_title, g1_title)||'"]'
