@@ -780,8 +780,8 @@ def loadanswers(campaign):
                 
         insert into  external.answers_calc_subconjunt 
         select s.*
-        , case when u.value_unnest is not null then '1' else '0'end as value, gender::text
-        , u.instance_number
+            , case when u.value_unnest is not null then '1' else '0'end as value, gender::text
+            , u.instance_number
         from  external.full_answers_organization_project_subconjunt s
             left join external.methods_indicatorresult_unnest u
                 on s.id_survey=u.survey_id 
@@ -790,19 +790,30 @@ def loadanswers(campaign):
         where s.list_item_id is not null
         union all
         select s.*
-        , value_unnest::text as value, gender::text
-         , u.instance_number
+            , value_unnest::text as value, gender::text
+            , u.instance_number
         from  external.full_answers_organization_project_subconjunt s
             left join external.methods_indicatorresult_unnest u
                 on s.id_survey=u.survey_id 
                     and s.id_indicator=u.indicator_id 
                     and s.g1_id=u.group_item_id
         where s.g1_id is not null
-            and s.g2_id is null
+            and s.g2_id is null and u.group_2_item_id is null	
         union all
         select s.*
-        , value_unnest::text as value, gender::text
-         , u.instance_number
+            , value_unnest::text as value, gender::text
+            , u.instance_number
+        from  external.full_answers_organization_project_subconjunt s
+            left join external.methods_indicatorresult_unnest u
+                on s.id_survey=u.survey_id 
+                    and s.id_indicator=u.indicator_id 
+                    and s.g2_id=u.group_2_item_id
+        where s.g1_id is null and u.group_item_id is null
+            and s.g2_id is not null    
+        union all
+        select s.*
+            , value_unnest::text as value, gender::text
+            , u.instance_number
         from  external.full_answers_organization_project_subconjunt s
             left join external.methods_indicatorresult_unnest u
                 on s.id_survey=u.survey_id 
@@ -819,8 +830,8 @@ def loadanswers(campaign):
             left join external.methods_indicatorresult_unnest u
                 on s.id_survey=u.survey_id 
                     and s.id_indicator=u.indicator_id 
-        where s.g1_id is null
-            and s.g2_id is null	
+        where s.g1_id is null and u.group_item_id is null
+            and s.g2_id is null and u.group_2_item_id is null	
             and s.list_item_id is null;	
 
 
@@ -1047,10 +1058,62 @@ def loadanswers(campaign):
                         when count(distinct g2_title)>0 then '["'||string_agg(value,'","' order by g2_title_fr, g1_title_fr)||'"]'
                         when count(distinct list_item_title)>0 then '['||string_agg(value,',' order by list_item_title)||']'
                         else string_agg(value,'') end as str_value_fr
-                    , coalesce(i.code, '') as set_code, ac.instance_number
+                    , coalesce(i.code, '') as set_code
+                    , ac.instance_number
+                    , max(i.sort_value) as set_sort_value
+                    , max(i.set_name) as set_name
+                    , max(i.set_name_en) as set_name_en
+                    , max(i.set_name_ca) as set_name_ca
+                    , max(i.set_name_gl) as set_name_gl
+                    , max(i.set_name_eu) as set_name_eu
+                    , max(i.set_name_es) as set_name_es
+                    , max(i.set_name_nl) as set_name_nl
+                    , max(i.set_name_fr) as set_name_fr
+                    , max(i.set_description) as set_description
+                    , max(i.set_description_en) as set_description_en
+                    , max(i.set_description_ca) as set_description_ca
+                    , max(i.set_description_gl) as set_description_gl
+                    , max(i.set_description_eu) as set_description_eu
+                    , max(i.set_description_es) as set_description_es
+                    , max(i.set_description_nl) as set_description_nl
+                    , max(i.set_description_fr) as set_description_fr
+                    , max(i.set_instance_name) as set_instance_name
+                    , max(i.set_instance_name_en) as set_instance_name_en
+                    , max(i.set_instance_name_ca) as set_instance_name_ca
+                    , max(i.set_instance_name_gl) as set_instance_name_gl
+                    , max(i.set_instance_name_eu) as set_instance_name_eu
+                    , max(i.set_instance_name_es) as set_instance_name_es
+                    , max(i.set_instance_name_nl) as set_instance_name_nl
+                    , max(i.set_instance_name_fr) as set_instance_name_fr
             from external.answers_calc_subconjunt ac
             left join (
-                select distinct i.indicator_id, smi.code
+                select distinct 
+                    i.indicator_id
+                    , smi.code
+                    , smi.name as set_name
+                    , smi.name_en as set_name_en
+                    , smi.name_ca as set_name_ca
+                    , smi.name_gl as set_name_gl
+                    , smi.name_eu as set_name_eu
+                    , smi.name_es as set_name_es
+                    , smi.name_nl as set_name_nl
+                    , smi.name_fr as set_name_fr
+                    , smi.description as set_description
+                    , smi.description_en as set_description_en
+                    , smi.description_ca as set_description_ca
+                    , smi.description_gl as set_description_gl
+                    , smi.description_eu as set_description_eu
+                    , smi.description_es as set_description_es
+                    , smi.description_nl as set_description_nl
+                    , smi.description_fr as set_description_fr
+                    , smi.instance_name as set_instance_name
+                    , smi.instance_name_en as set_instance_name_en
+                    , smi.instance_name_ca as set_instance_name_ca
+                    , smi.instance_name_gl as set_instance_name_gl
+                    , smi.instance_name_eu as set_instance_name_eu
+                    , smi.instance_name_es as set_instance_name_es
+                    , smi.instance_name_nl as set_instance_name_nl
+                    , smi.instance_name_fr as set_instance_name_fr
                 from syh_methods_indicatorsset_indicators i
                 join syh_methods_indicatorsset smi on i.indicatorsset_id=smi.id
             ) i on ac.id_indicator=i.indicator_id
