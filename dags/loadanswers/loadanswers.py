@@ -1070,7 +1070,7 @@ def loadanswers(campaign):
                         when count(distinct list_item_title)>0 then '['||string_agg(value,',' order by list_item_sort_order)||']'
                         else string_agg(value,'') end as str_value_fr
                     , coalesce(i.code, '') as set_code
-                    , ac.instance_number
+                    , coalesce(ac.instance_number,0) as instance_number
                     , max(i.sort_value) as set_sort_value
                     , max(i.set_name) as set_name
                     , max(i.set_name_en) as set_name_en
@@ -1133,7 +1133,7 @@ def loadanswers(campaign):
             {where}
             group by id_campaign,  id_survey, id_method, id_user, id_organization, id_project
                 , id_methods_section, id_indicator, indicator_code, is_direct_indicator
-                , coalesce(i.code, ''), ac.instance_number
+                , coalesce(i.code, ''), coalesce(ac.instance_number,0)
                 ;
     
             --create index ci_caf on  external.answers_calc_agg_full  (id_campaign, id_method, id_organization);
