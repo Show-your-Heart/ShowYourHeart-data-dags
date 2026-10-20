@@ -108,6 +108,7 @@ def loadanswers(campaign):
             , replace(coalesce(sml.title_es, sml.title),'"','″') as list_item_title_es
             , replace(coalesce(sml.title_nl, sml.title),'"','″') as list_item_title_nl
             , replace(coalesce(sml.title_fr, sml.title),'"','″') as list_item_title_fr
+            , li.sort_order as list_item_sort_order
             , g1.id as g1_id
             , replace(g1.title,'"','″') as g1_title
             , replace(coalesce(g1.title_en, g1.title),'"','″') as g1_title_en
@@ -212,6 +213,7 @@ def loadanswers(campaign):
 	            , replace(coalesce(sml.title_es, sml.title),'"','″') as list_item_title_es
 	            , replace(coalesce(sml.title_nl, sml.title),'"','″') as list_item_title_nl
 	            , replace(coalesce(sml.title_fr, sml.title),'"','″') as list_item_title_fr
+	            , li.sort_order as list_item_sort_order
 	            , null::uuid as g1_id
 	            , 'TOTAL' as g1_title
 	            , 'TOTAL' as g1_title_en
@@ -316,6 +318,7 @@ def loadanswers(campaign):
             , replace(coalesce(sml.title_es, sml.title),'"','″') as list_item_title_es
             , replace(coalesce(sml.title_nl, sml.title),'"','″') as list_item_title_nl
             , replace(coalesce(sml.title_fr, sml.title),'"','″') as list_item_title_fr
+            , li.sort_order as list_item_sort_order
             , g1.id as g1_id
             , replace(g1.title,'"','″') as g1_title
             , replace(coalesce(g1.title_en, g1.title),'"','″') as g1_title_en
@@ -420,6 +423,7 @@ def loadanswers(campaign):
             , replace(coalesce(sml.title_es, sml.title),'"','″') as list_item_title_es
             , replace(coalesce(sml.title_nl, sml.title),'"','″') as list_item_title_nl
             , replace(coalesce(sml.title_fr, sml.title),'"','″') as list_item_title_fr
+            , li.sort_order as list_item_sort_order
             , null::uuid as g1_id
             , 'TOTAL' as g1_title
             , 'TOTAL' as g1_title_en
@@ -518,6 +522,7 @@ def loadanswers(campaign):
             , null::varchar as list_item_title_es
             , null::varchar as list_item_title_nl
             , null::varchar as list_item_title_fr
+            , null::int as list_item_sort_order
             , null::uuid as g1_id
             , null::varchar as g1_title
             , null::varchar as g1_title_en
@@ -1001,62 +1006,62 @@ def loadanswers(campaign):
                         end::varchar,',' order by gender)||']' end as str_gender_fr
                 
                , case when count(distinct g2_title)>0 then '["'||string_agg(concat(g2_title,' ◻️ ', g1_title),'","' order by g2_title, g1_title)||'"]'
-                    when count(distinct list_item_title)>0 then '["'||string_agg(list_item_title,'","' order by list_item_title)||'"]'
+                    when count(distinct list_item_title)>0 then '["'||string_agg(list_item_title,'","' order by list_item_sort_order)||'"]'
                     end as str_list
                 , case when count(distinct g2_title)>0 then '["'||string_agg(concat(g2_title_en,' ◻️ ', g1_title_en),'","' order by g2_title, g1_title)||'"]'
-                    when count(distinct list_item_title)>0 then '["'||string_agg(list_item_title_en,'","' order by list_item_title)||'"]'
+                    when count(distinct list_item_title)>0 then '["'||string_agg(list_item_title_en,'","' order by list_item_sort_order)||'"]'
                      end as str_list_en
                 , case when count(distinct g2_title)>0 then '["'||string_agg(concat(g2_title_ca,' ◻️ ', g1_title_ca),'","' order by g2_title, g1_title)||'"]'
-                    when count(distinct list_item_title_ca)>0 then '["'||string_agg(list_item_title_ca,'","' order by list_item_title)||'"]'
+                    when count(distinct list_item_title_ca)>0 then '["'||string_agg(list_item_title_ca,'","' order by list_item_sort_order)||'"]'
                      end as str_list_ca
                 , case when count(distinct g2_title)>0 then '["'||string_agg(concat(g2_title_es,' ◻️ ', g1_title_es),'","' order by g2_title, g1_title)||'"]'
-                    when count(distinct list_item_title)>0 then '["'||string_agg(list_item_title_es,'","' order by list_item_title_es)||'"]'
+                    when count(distinct list_item_title)>0 then '["'||string_agg(list_item_title_es,'","' order by list_item_sort_order)||'"]'
                      end as str_list_es
                 , case when count(distinct g2_title)>0 then '["'||string_agg(concat(g2_title_eu,' ◻️ ', g1_title_eu),'","' order by g2_title, g1_title)||'"]'
-                    when count(distinct list_item_title)>0 then '["'||string_agg(list_item_title_eu,'","' order by list_item_title)||'"]'
+                    when count(distinct list_item_title)>0 then '["'||string_agg(list_item_title_eu,'","' order by list_item_sort_order)||'"]'
                      end as str_list_eu
                 , case when count(distinct g2_title)>0 then '["'||string_agg(concat(g2_title_gl,' ◻️ ', g1_title_gl),'","' order by g2_title, g1_title)||'"]'
-                    when count(distinct list_item_title)>0 then '["'||string_agg(list_item_title_gl,'","' order by list_item_title)||'"]'
+                    when count(distinct list_item_title)>0 then '["'||string_agg(list_item_title_gl,'","' order by list_item_sort_order)||'"]'
                      end as str_list_gl
                 , case when count(distinct g2_title)>0 then '["'||string_agg(concat(g2_title_nl,' ◻️ ', g1_title_nl),'","' order by g2_title, g1_title)||'"]'
-                    when count(distinct list_item_title)>0 then '["'||string_agg(list_item_title_nl,'","' order by list_item_title)||'"]'
+                    when count(distinct list_item_title)>0 then '["'||string_agg(list_item_title_nl,'","' order by list_item_sort_order)||'"]'
                      end as str_list_nl
                 , case when count(distinct g2_title)>0 then '["'||string_agg(concat(g2_title_fr,' ◻️ ', g1_title_fr),'","' order by g2_title, g1_title)||'"]'
-                    when count(distinct list_item_title)>0 then '["'||string_agg(list_item_title_fr,'","' order by list_item_title)||'"]'
+                    when count(distinct list_item_title)>0 then '["'||string_agg(list_item_title_fr,'","' order by list_item_sort_order)||'"]'
                      end as str_list_fr
    
                     , count(distinct list_item_title)
                 , case when count(distinct gender)>0 then '['||string_agg(value,',' order by gender)||']'
                         when count(distinct g2_title)>0 then '["'||string_agg(value,'","' order by g2_title, g1_title)||'"]'
-                        when count(distinct list_item_title)>0 then '['||string_agg(value,',' order by list_item_title)||']'
+                        when count(distinct list_item_title)>0 then '['||string_agg(value,',' order by list_item_sort_order)||']'
                         else string_agg(value,'') end as str_value
                     , case when count(distinct gender)>0 then '['||string_agg(value,',' order by gender)||']'
                         when count(distinct g2_title)>0 then '["'||string_agg(value,'","' order by g2_title_en, g1_title_en)||'"]'
-                        when count(distinct list_item_title)>0 then '['||string_agg(value,',' order by list_item_title)||']'
+                        when count(distinct list_item_title)>0 then '['||string_agg(value,',' order by list_item_sort_order)||']'
                         else string_agg(value,'') end as str_value_en
                     , case when count(distinct gender)>0 then '['||string_agg(value,',' order by gender)||']'
                         when count(distinct g2_title)>0 then '["'||string_agg(value,'","' order by g2_title_ca, g1_title_ca)||'"]'
-                        when count(distinct list_item_title)>0 then '['||string_agg(value,',' order by list_item_title)||']'
+                        when count(distinct list_item_title)>0 then '['||string_agg(value,',' order by list_item_sort_order)||']'
                         else string_agg(value,'') end as str_value_ca
                     , case when count(distinct gender)>0 then '['||string_agg(value,',' order by gender)||']'
                         when count(distinct g2_title)>0 then '["'||string_agg(value,'","' order by g2_title_es, g1_title_es)||'"]'
-                        when count(distinct list_item_title)>0 then '['||string_agg(value,',' order by list_item_title)||']'
+                        when count(distinct list_item_title)>0 then '['||string_agg(value,',' order by list_item_sort_order)||']'
                          else string_agg(value,'') end as str_value_es
                     , case when count(distinct gender)>0 then '['||string_agg(value,',' order by gender)||']'
                         when count(distinct g2_title)>0 then '["'||string_agg(value,'","' order by g2_title_eu, g1_title_eu)||'"]'
-                        when count(distinct list_item_title)>0 then '['||string_agg(value,',' order by list_item_title)||']'
+                        when count(distinct list_item_title)>0 then '['||string_agg(value,',' order by list_item_sort_order)||']'
                         else string_agg(value,'') end as str_value_eu
                     , case when count(distinct gender)>0 then '['||string_agg(value,',' order by gender)||']'
                         when count(distinct g2_title)>0 then '["'||string_agg(value,'","' order by g2_title_gl, g1_title_gl)||'"]'
-                        when count(distinct list_item_title)>0 then '['||string_agg(value,',' order by list_item_title)||']'
+                        when count(distinct list_item_title)>0 then '['||string_agg(value,',' order by list_item_sort_order)||']'
                         else string_agg(value,'') end as str_value_gl
                     , case when count(distinct gender)>0 then '['||string_agg(value,',' order by gender)||']'
                         when count(distinct g2_title)>0 then '["'||string_agg(value,'","' order by g2_title_nl, g1_title_nl)||'"]'
-                        when count(distinct list_item_title)>0 then '['||string_agg(value,',' order by list_item_title)||']'
+                        when count(distinct list_item_title)>0 then '['||string_agg(value,',' order by list_item_sort_order)||']'
                         else string_agg(value,'') end as str_value_nl
                     , case when count(distinct gender)>0 then '['||string_agg(value,',' order by gender)||']'
                         when count(distinct g2_title)>0 then '["'||string_agg(value,'","' order by g2_title_fr, g1_title_fr)||'"]'
-                        when count(distinct list_item_title)>0 then '['||string_agg(value,',' order by list_item_title)||']'
+                        when count(distinct list_item_title)>0 then '['||string_agg(value,',' order by list_item_sort_order)||']'
                         else string_agg(value,'') end as str_value_fr
                     , coalesce(i.code, '') as set_code
                     , ac.instance_number
