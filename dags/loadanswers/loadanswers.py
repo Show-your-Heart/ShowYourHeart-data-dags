@@ -609,6 +609,7 @@ def loadanswers(campaign):
             , null::varchar as list_item_title_es
             , null::varchar as list_item_title_nl
             , null::varchar as list_item_title_fr
+            , null::int as list_item_sort_order
             , null::uuid as g1_id
             , null::varchar as g1_title
             , null::varchar as g1_title_en
