@@ -108,7 +108,7 @@ def loadanswers(campaign):
             , replace(coalesce(sml.title_es, sml.title),'"','″') as list_item_title_es
             , replace(coalesce(sml.title_nl, sml.title),'"','″') as list_item_title_nl
             , replace(coalesce(sml.title_fr, sml.title),'"','″') as list_item_title_fr
-            , li.sort_order as list_item_sort_order
+            , li.sort_value as list_item_sort_order
             , g1.id as g1_id
             , replace(g1.title,'"','″') as g1_title
             , replace(coalesce(g1.title_en, g1.title),'"','″') as g1_title_en
@@ -213,7 +213,7 @@ def loadanswers(campaign):
 	            , replace(coalesce(sml.title_es, sml.title),'"','″') as list_item_title_es
 	            , replace(coalesce(sml.title_nl, sml.title),'"','″') as list_item_title_nl
 	            , replace(coalesce(sml.title_fr, sml.title),'"','″') as list_item_title_fr
-	            , li.sort_order as list_item_sort_order
+	            , li.sort_value as list_item_sort_order
 	            , null::uuid as g1_id
 	            , 'TOTAL' as g1_title
 	            , 'TOTAL' as g1_title_en
@@ -318,7 +318,7 @@ def loadanswers(campaign):
             , replace(coalesce(sml.title_es, sml.title),'"','″') as list_item_title_es
             , replace(coalesce(sml.title_nl, sml.title),'"','″') as list_item_title_nl
             , replace(coalesce(sml.title_fr, sml.title),'"','″') as list_item_title_fr
-            , li.sort_order as list_item_sort_order
+            , li.sort_value as list_item_sort_order
             , g1.id as g1_id
             , replace(g1.title,'"','″') as g1_title
             , replace(coalesce(g1.title_en, g1.title),'"','″') as g1_title_en
@@ -423,7 +423,7 @@ def loadanswers(campaign):
             , replace(coalesce(sml.title_es, sml.title),'"','″') as list_item_title_es
             , replace(coalesce(sml.title_nl, sml.title),'"','″') as list_item_title_nl
             , replace(coalesce(sml.title_fr, sml.title),'"','″') as list_item_title_fr
-            , li.sort_order as list_item_sort_order
+            , li.sort_value as list_item_sort_order
             , null::uuid as g1_id
             , 'TOTAL' as g1_title
             , 'TOTAL' as g1_title_en
