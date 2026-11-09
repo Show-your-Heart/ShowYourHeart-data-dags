@@ -16,7 +16,7 @@ def cecj_transform(tmp_dir_name):
 
 
 with DAG(
-    "generate_infographics",
+    "generate_cecj_aggregated_data",
     start_date=datetime(2021, 1, 1),
     schedule_interval="0 6 * * *",
     catchup=False,
