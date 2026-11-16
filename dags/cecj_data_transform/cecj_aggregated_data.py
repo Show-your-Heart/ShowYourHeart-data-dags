@@ -121,18 +121,18 @@ def main():
     # print("Got data")
     # con.dispose()
 
+    # Get DB connection to add new processed data
+    db_conn = BaseHook.get_connection("DWH").get_hook().get_sqlalchemy_engine()
+
     # Load data from db to dataframe
     df_answers = pd.read_sql(
         f"SELECT * FROM 'external'.answers_calc_agg WHERE campaign_name = '{syh_campaign_name}'  and  year  = '{syh_campaign_year}'",
-        BaseHook.get_connection("DWH").get_uri(),
+        db_conn,
     )
 
     # Panda's options
     pd.set_option("display.max_rows", None)
     pd.set_option("display.max_columns", None)
-
-    # Get DB connection to add new processed data
-    db_conn = BaseHook.get_connection("DWH").get_hook().get_sqlalchemy_engine()
 
     ###############
     #    GRAPHS   #
