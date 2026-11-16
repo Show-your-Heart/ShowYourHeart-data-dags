@@ -13,7 +13,7 @@ pd.set_option("display.max_columns", None)
 #    VARS     #
 ###############
 
-population = Variable.get("cecj_population")
+population = int(Variable.get("cecj_population"))
 year = Variable.get("cecj_year")
 syh_campaign_year = Variable.get("cecj_syh_campaign_year")
 syh_campaign_name = Variable.get("cecj_syh_campaign_name")
