@@ -126,7 +126,7 @@ def main():
 
     # Load data from db to dataframe
     df_answers = pd.read_sql(
-        f"SELECT * FROM 'external'.answers_calc_agg WHERE campaign_name = '{syh_campaign_name}'  and  year  = '{syh_campaign_year}'",
+        f"SELECT * FROM external.answers_calc_agg WHERE campaign_name = '{syh_campaign_name}'  and  year  = '{syh_campaign_year}'",
         db_conn,
     )
 
