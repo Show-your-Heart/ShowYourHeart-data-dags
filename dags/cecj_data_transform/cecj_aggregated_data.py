@@ -23,6 +23,33 @@ syh_campaign_name = Variable.get("cecj_syh_campaign_name")
 ###############
 
 
+# The value column contains lists of one value, remove the list
+def clear_value_col(df):
+    df["value"] = df["value"].apply(lambda x: x[0])
+    return df
+
+
+# Transform a string containing a list into a list
+def str_to_list(str):
+    stripped_str = str.lstrip(str[0]).rstrip(str[-1])
+    stripped_str = re.sub(r'"', "", stripped_str)
+    return stripped_str.split(",")
+
+
+# Gets the raw data of str_suffix and value and returns a parsed dict
+def parse_row(row):
+    # Prepare format of "str_suffix" column cell content
+    str_suffix_list = str_to_list(row.str_suffix)
+
+    # Prepare format of "value" column cell content
+    if pd.isna(row.str_value):
+        return None
+    str_value_list = str_to_list(row.str_value)
+
+    # Create dictionary with keys as "str_suffix" column and values as "value" column
+    return dict(zip(str_suffix_list, str_value_list))
+
+
 # Get the sum of total values of simple numeric indicator
 def get_agg(ind, df):
     return df.loc[df["indicator_code"] == ind, "str_value"].astype(float).sum()
@@ -32,24 +59,6 @@ def get_agg(ind, df):
 def get_table_total_agg(ind, df):
     # print(f"[i] Executing function get_table_total_agg for indicator {ind}...")
     return get_table_cell_agg(ind, "TOTAL", "TOTAL", df)
-
-
-# Gets the raw data of str_suffix and value and returns a parsed dict
-def parse_row(row):
-    # Prepare format of "str_suffix" column cell content
-    stripped_row = row.str_suffix.lstrip(row.str_suffix[0]).rstrip(row.str_suffix[-1])
-    stripped_row = re.sub(r'"', " ", stripped_row)
-    str_suffix_list = stripped_row.split(",")
-
-    # Prepare format of "value" column cell content
-    if pd.isna(row.str_value):
-        return None
-    stripped_row = row.str_value.lstrip(row.str_suffix[0]).rstrip(row.str_suffix[-1])
-    stripped_row = re.sub(r'"', " ", stripped_row)
-    str_value_list = stripped_row.split(",")
-
-    # Create dictionary with keys as "str_suffix" column and values as "value" column
-    return dict(zip(str_suffix_list, str_value_list))
 
 
 # Get the sum of column total values of an indicator type "table"
@@ -95,6 +104,56 @@ def get_table_column_agg(ind, column, df):
 # Get the sum of row total values of an indicator type "table"
 def get_table_row_agg(ind, row, df):
     return get_table_cell_agg(ind, row, "TOTAL", df)
+
+
+# Get the sum of a numeric indicator from a set grouped by another list indicator of the same set
+def get_set_agg_grouped_by_ind(ind, set_code, group_by_ind, df):
+    # print("**************************************************")
+    # print(
+    #     f"[i] Executing function get_collection_agg_grouped_by_ind for indicator {ind}  of set {set} grouped by {group_by_ind}..."
+    # )
+
+    # Variables
+    totals = {}
+    total = 0
+
+    # Filter dataframe by indicator code
+    df_set = df.loc[df["set_code"] == set_code]
+    df_group_by = clear_value_col(df_set.loc[df["indicator_code"] == group_by_ind])
+    df_ind = clear_value_col(df_set.loc[df["indicator_code"] == ind])
+
+    # Save only the three required columns
+    df_group_by_cleared = df_group_by[
+        ["organization_name", "str_value", "instance_number"]
+    ]
+
+    groups = df_group_by_cleared["str_value"].unique()
+
+    # Save only the three required columns of the target indicator
+    df_ind_cleared = df_ind[["organization_name", "value", "instance_number"]]
+
+    for group in groups:
+        # print(f"Calculating total for group: {group}...")
+        totals[group] = 0
+
+        # Iterate throuhg each row of target indicator dataframe
+        for df_row in df_group_by_cleared.itertuples(index=False):
+            if df_row.str_value == group:
+                df_match = df_ind_cleared.loc[
+                    (df["organization_name"] == df_row.organization_name)
+                    & (df["instance_number"] == df_row.instance_number)
+                ]
+                value = df_match.iloc[0]["value"]
+                if value != "NULL":
+                    # Aggragate value
+                    totals[group] += float(value)
+
+    for value in totals.values():
+        total += value
+
+    totals["TOTAL"] = total
+
+    return totals
 
 
 #############
@@ -1030,6 +1089,44 @@ def main():
                 {float(cecj_g_13_data[i])}
             );
             commit; 
+        """
+        executequery(query, db_conn)
+
+    print("-----------------------------")
+
+    # ------------ #
+    #  Gráfica 14  # Volumen comercial de productos de comercio justo como indicador de impacto por país
+    # ------------ #
+    # Descripción: Sumar las datos de todas las importados en compras mayoristas (impacto) cecj-colección 10 y agrupar por país.
+    #
+    #  Indicadores       | Tipo entidad  | Ubicación en formulario SyH
+    # -------------------|---------------------------------------------------------------------------------------------------------------
+    # cecj-76            | Importadora   | Páis
+    # cecj-83            | Importadora   | Estimación de compra
+    #
+    # Tabla: comerciojusto.amount_by_country
+
+    print("------------------------------")
+    print("---------[Graph 14]-----------")
+
+    totals = get_set_agg_grouped_by_ind(
+        "cecj-83", "cecj-coleccion-10", "cecj-76", df_answers
+    )
+
+    # Print aggregated value
+    print(totals)
+
+    for key, value in totals.items():
+        query = f"""
+            INSERT INTO comerciojusto.amount_by_country
+            (year, origin, amount) 
+            VALUES 
+            (
+                {year}, 
+                '{key}',
+                {value}
+            );
+            commit;
         """
         executequery(query, db_conn)
 
