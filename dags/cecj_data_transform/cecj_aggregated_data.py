@@ -232,6 +232,9 @@ def main():
     query = f"delete from comerciojusto.prod_no_flo  where year = {year}; commit;"
     executequery(query, db_conn)
 
+    query = f"delete from comerciojusto.amount_by_country  where year = {year}; commit;"
+    executequery(query, db_conn)
+
     # ----------- #
     #  Gráfica 1  # Evolución de las ventas de productos de Comercio Justo: este es el dato de facturación del Comercio Justo en el Estado Español
     # ----------- #
