@@ -424,7 +424,7 @@ def main():
             get_table_column_agg("cecj-159", "cecj-ventas-totales", df_answers)
             + (
                 get_table_row_agg("cecj-106", "cecj-cafe", df_answers)
-                + get_table_row_agg("cecj-106", "cecj-cacao-derivados", df_answers)
+                + get_table_row_agg("cecj-106", "cecj-cacao", df_answers)
                 + get_table_row_agg("cecj-106", "cecj-azucar-dulces", df_answers)
                 + get_table_row_agg("cecj-106", "cecj-te-infusiones", df_answers)
                 + get_table_row_agg("cecj-106", "cecj-otros-alimentacion", df_answers)
@@ -436,7 +436,7 @@ def main():
             + get_table_row_agg("cecj-106", "cecj-textil", df_answers)
             - get_table_column_agg("cecj-172", "cecj-fairtrade", df_answers)
         ),
-        get_table_cell_agg("cecj-177", "cecj-otros", "cecj-ventas-totales", df_answers),
+        get_table_column_agg("cecj-177", "cecj-ventas-totales", df_answers),
     ]
 
     # Print aggregated value
@@ -530,13 +530,13 @@ def main():
             + get_table_row_agg("cecj-106", "cecj-azucar-dulces", df_answers)
             - (
                 get_table_cell_agg(
-                    "cecj-163", "cecj-azucar", "cecj-ventas-totales", df_answers
+                    "cecj-163", "cecj-azucar", "cecj-fairtrade", df_answers
                 )
                 + get_table_cell_agg(
-                    "cecj-163", "cecj-mermelada-miel", "cecj-ventas-totales", df_answers
+                    "cecj-163", "cecj-mermelada-miel", "cecj-fairtrade", df_answers
                 )
                 + get_table_cell_agg(
-                    "cecj-163", "cecj-galletas", "cecj-ventas-totales", df_answers
+                    "cecj-163", "cecj-galletas", "cecj-fairtrade", df_answers
                 )
             )
         ),
@@ -565,16 +565,16 @@ def main():
             + get_table_row_agg("cecj-106", "cecj-otros-alimentacion", df_answers)
             - (
                 get_table_cell_agg(
-                    "cecj-163", "cecj-alcohol", "cecj-ventas-totales", df_answers
+                    "cecj-163", "cecj-alcohol", "cecj-fairtrade", df_answers
                 )
                 + get_table_cell_agg(
-                    "cecj-163", "cecj-no-alcohol", "cecj-ventas-totales", df_answers
+                    "cecj-163", "cecj-no-alcohol", "cecj-fairtrade", df_answers
                 )
                 + get_table_cell_agg(
-                    "cecj-163", "cecj-cereales", "cecj-ventas-totales", df_answers
+                    "cecj-163", "cecj-cereales", "cecj-fairtrade", df_answers
                 )
                 + get_table_cell_agg(
-                    "cecj-163", "cecj-otros", "cecj-ventas-totales", df_answers
+                    "cecj-163", "cecj-otros", "cecj-fairtrade", df_answers
                 )
             )
         ),
@@ -588,10 +588,10 @@ def main():
             + get_table_row_agg("cecj-106", "cecj-textil", df_answers)
             - (
                 get_table_cell_agg(
-                    "cecj-172", "cecj-textil-ropa", "cecj-ventas-totales", df_answers
+                    "cecj-172", "cecj-textil-ropa", "cecj-fairtrade", df_answers
                 )
                 + get_table_cell_agg(
-                    "cecj-172", "cecj-textil-hogar", "cecj-ventas-totales", df_answers
+                    "cecj-172", "cecj-textil-hogar", "cecj-fairtrade", df_answers
                 )
             )
         ),
@@ -726,9 +726,9 @@ def main():
     # Calculated data:
     # otras_distribuidoras_total = cecj-150_cecj-otras-distribuidoreas-importadoras_total + cecj-151_cecj-otras-distribuidoreas-importadoras_total
     otras_distribuidoras_total = get_table_row_agg(
-        "cecj-150", "cecj-otras-distribuidoreas-importadoras", df_answers
+        "cecj-150", "cecj-otras-distribuidoras-importadoras", df_answers
     ) + get_table_row_agg(
-        "cecj-151", "cecj-otras-distribuidoreas-importadoras", df_answers
+        "cecj-151", "cecj-otras-distribuidoras-importadoras", df_answers
     )
 
     # Calculated data:
@@ -740,8 +740,8 @@ def main():
     # Calculated data:
     # otros_minoristas_total = cecj-150_cecj-otros_minoristas_total + cecj-151_cecj-otros_minoristas_total
     otros_minoristas_total = get_table_row_agg(
-        "cecj-150", "cecj-otros_minoristas", df_answers
-    ) + get_table_row_agg("cecj-151", "cecj-otros_minoristas", df_answers)
+        "cecj-150", "cecj-otros-minoristas", df_answers
+    ) + get_table_row_agg("cecj-151", "cecj-otros-minoristas", df_answers)
 
     cecj_g_7_data = [
         (
