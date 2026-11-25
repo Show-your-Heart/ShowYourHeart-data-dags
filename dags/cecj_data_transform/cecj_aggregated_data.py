@@ -1191,7 +1191,7 @@ def main():
         get_agg("cecj-196", df_answers),
     ]
 
-    for key, value in totals.items():
+    for i in range(len(cecj_other_sales_data)):
         query = f"""
             INSERT INTO comerciojusto.sales
             (year, type, sales, amount) 
@@ -1199,8 +1199,8 @@ def main():
             (
                 {year},
                 'EXTRA', 
-                '{cecj_other_sales_labels}',
-                {cecj_other_sales_data}
+                '{cecj_other_sales_labels[i]}',
+                {cecj_other_sales_data[i]}
             );
             commit;
         """
@@ -1239,15 +1239,15 @@ def main():
         get_table_column_agg("cecj-191", "cecj-sello-ecologuco-ue", df_answers),
     ]
 
-    for key, value in totals.items():
+    for i in range(len(cecj_other_data)):
         query = f"""
             INSERT INTO comerciojusto.other
             (year, label, data) 
             VALUES 
             (
                 {year}, 
-                '{cecj_other_labels}',
-                {cecj_other_data}
+                '{cecj_other_labels[i]}',
+                {cecj_other_data[i]}
             );
             commit;
         """
