@@ -1242,7 +1242,7 @@ def main():
     for key, value in totals.items():
         query = f"""
             INSERT INTO comerciojusto.other
-            (year, origin, amount) 
+            (year, label, data) 
             VALUES 
             (
                 {year}, 
