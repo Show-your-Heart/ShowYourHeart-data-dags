@@ -497,6 +497,12 @@ def main():
         "Otros Alimentación",
         "Textil",
         "Juguetes y otros",
+        "Complementos",
+        "Bisutería",
+        "Juguetes",
+        "Decoración",
+        "Otros (artesanía)",
+        "Muebles",
         "Cosmética",
     ]
 
@@ -617,6 +623,22 @@ def main():
             + get_table_cell_agg(
                 "cecj-177", "cecj-muebles", "cecj-ventas-totales", df_answers
             )
+        ),
+        get_table_cell_agg(
+            "cecj-168", "cecj-complementos", "cecj-ventas-totales", df_answers
+        ),
+        get_table_cell_agg(
+            "cecj-168", "cecj-bisuteria", "cecj-ventas-totales", df_answers
+        ),
+        get_table_cell_agg(
+            "cecj-168", "cecj-juegos-juguetes", "cecj-ventas-totales", df_answers
+        ),
+        get_table_cell_agg(
+            "cecj-168", "cecj-decoracion", "cecj-ventas-totales", df_answers
+        ),
+        get_table_cell_agg("cecj-168", "cecj-otros", "cecj-ventas-totales", df_answers),
+        get_table_cell_agg(
+            "cecj-177", "cecj-muebles", "cecj-ventas-totales", df_answers
         ),
         get_table_cell_agg(
             "cecj-177", "cecj-cosmetica", "cecj-ventas-totales", df_answers
@@ -875,6 +897,9 @@ def main():
         "Té e infusiones",
         "Otros alimentación",
         "Textil (ropa, hogar y complementos)",
+        "Textil ropa",
+        "Textil hogar",
+        "Complementos",
         "Artesanías (varias)",
         "Cosmética",
     ]
@@ -913,6 +938,15 @@ def main():
             "cecj-168", "cecj-textil-hogar", "cecj-ventas-totales", df_answers
         )
         + get_table_cell_agg(
+            "cecj-168", "cecj-complementos", "cecj-ventas-totales", df_answers
+        ),
+        get_table_cell_agg(
+            "cecj-168", "cecj-textil-ropa", "cecj-ventas-totales", df_answers
+        ),
+        get_table_cell_agg(
+            "cecj-168", "cecj-textil-hogar", "cecj-ventas-totales", df_answers
+        ),
+        get_table_cell_agg(
             "cecj-168", "cecj-complementos", "cecj-ventas-totales", df_answers
         ),
         get_table_cell_agg(
@@ -1128,6 +1162,98 @@ def main():
                 {year}, 
                 '{key}',
                 {value}
+            );
+            commit;
+        """
+        executequery(query, db_conn)
+
+    print("-----------------------------")
+
+    # -------------- #
+    #  Otros ventas  # Otros datos calculados para ventas
+    # -------------- #
+    #
+    # Tabla: comerciojusto.sales
+
+    print("------------------------------")
+    print("------------[Sales extra]-----------")
+
+    cecj_other_sales_labels = [
+        "Total productos CJ",
+        "Total ingresos por comercialización mayorista",
+        "Total venta en España",
+        "Total ventas",
+    ]
+    cecj_other_sales_data = [
+        get_agg("cecj-143", df_answers),
+        get_agg("cecj-148", df_answers),
+        get_agg("cecj-155", df_answers),
+        get_agg("cecj-196", df_answers),
+    ]
+
+    # Print aggregated value
+    print(totals)
+
+    for key, value in totals.items():
+        query = f"""
+            INSERT INTO comerciojusto.sales
+            (year, type, sales, amount) 
+            VALUES 
+            (
+                {year},
+                'EXTRA', 
+                '{cecj_other_sales_labels}',
+                {cecj_other_sales_data}
+            );
+            commit;
+        """
+        executequery(query, db_conn)
+
+    print("-----------------------------")
+
+    # ------- #
+    #  Otros  # Otros datos calculados
+    # ------- #
+    # Descripción: Datos extra.
+    #
+    # Tabla: comerciojusto.other
+
+    print("------------------------------")
+    print("------------[Other]-----------")
+
+    cecj_other_labels = [
+        "Puntos de venta",
+        "Tiendas",
+        "Ventas de tiendas y puntos de venta de CJ",
+        "Ventas de productos no de CJ con otras certificaciones",
+        "Ventas de productos no de CJ con certificacion Sello Ecológico UE",
+    ]
+    cecj_other_data = [
+        get_table_column_agg("cecj-29", "cecj-num-puntos-venta", df_answers),
+        get_table_column_agg("cecj-29", "cecj-num-tiendas", df_answers),
+        get_table_row_agg("cecj-150", "cecj-tiendas-organizaciones-cj", df_answers)
+        + get_table_row_agg(
+            "cecj-151",
+            "cecj-tiendas-organizaciones-cj",
+            df_answers,
+        )
+        + get_table_total_agg("cecj-187", df_answers),
+        get_table_total_agg("cecj-191", df_answers),
+        get_table_column_agg("cecj-191", "cecj-sello-ecologuco-ue", df_answers),
+    ]
+
+    # Print aggregated value
+    print(totals)
+
+    for key, value in totals.items():
+        query = f"""
+            INSERT INTO comerciojusto.other
+            (year, origin, amount) 
+            VALUES 
+            (
+                {year}, 
+                '{cecj_other_labels}',
+                {cecj_other_data}
             );
             commit;
         """
