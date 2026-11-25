@@ -1191,9 +1191,6 @@ def main():
         get_agg("cecj-196", df_answers),
     ]
 
-    # Print aggregated value
-    print(totals)
-
     for key, value in totals.items():
         query = f"""
             INSERT INTO comerciojusto.sales
@@ -1241,9 +1238,6 @@ def main():
         get_table_total_agg("cecj-191", df_answers),
         get_table_column_agg("cecj-191", "cecj-sello-ecologuco-ue", df_answers),
     ]
-
-    # Print aggregated value
-    print(totals)
 
     for key, value in totals.items():
         query = f"""
